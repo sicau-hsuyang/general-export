@@ -2,8 +2,8 @@ import Excel from 'exceljs'
 import BaseComponent from './component'
 export default class XlsxComponent extends BaseComponent {
 
-  constructor(dataSource) {
-    super(dataSource)
+  constructor(config) {
+    super(config)
   }
 
 
@@ -40,7 +40,8 @@ export default class XlsxComponent extends BaseComponent {
   }
 
   async doWExport() {
-    let dataSource = options.data;
+    let excelBlob = null
+    let dataSource = this.config.data;
     this.makeSureArray(dataSource)
     const data = reshapeData(dataSource)
     const excel = new Excel.Workbook()
@@ -58,13 +59,13 @@ export default class XlsxComponent extends BaseComponent {
     })
     sheet.addRows(data)
     try {
-      const buffer = fmt === 'xlsx' ? await excel.xlsx.writeBuffer() : await excel.csv.writeBuffer()
-      let blob = new Blob([buffer])
-      let excelStr = await utils.blob2String(blob)
-      // this.exportRaw(filename, blob);
+      const buffer = await excel.xlsx.writeBuffer()
+      excelBlob = new Blob([buffer])
     } catch (exp) {
       console.error('[ the error has occurred when exporting or the browser can not support export]')
     }
+
+    return excelBlob
   }
 
 }

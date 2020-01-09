@@ -102,30 +102,32 @@ export default class BSRunner {
     }
   }
 
+  saveBlob2File(blob) {
+    let filename = this.config.filename
+    var urlObject = window.URL || window.webkitURL
+    if (!urlObject || utils.isUndefined(Blob)) {
+      throw ('当前JS环境无法导出!')
+    }
+    // 对于IE10以上
+    if (window.navigator.msSaveBlob) {
+      window.navigator.msSaveBlob(blob, filename)
+    } else {
+      var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
+      save_link.href = urlObject.createObjectURL(blob)
+      save_link.download = filename
+      var ev = document.createEvent('MouseEvents')
+      ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+      save_link.dispatchEvent(ev)
+    }
+  }
+
 
   /**
    * 导出数据方法
    * @param {String} inputTxt
    */
   saveTxt2File(inputTxt) {
-    let filename = this.config.filename
-    var urlObject = window.URL || window.webkitURL
-    if (!urlObject || typeof Blob === 'undefined') {
-      throw ('当前JS环境无法导出!')
-    }
-
-    var export_blob = new Blob([inputTxt])
-    // 对于IE10以上
-    if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(export_blob, filename)
-    } else {
-      var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
-      save_link.href = urlObject.createObjectURL(export_blob)
-      save_link.download = filename
-      var ev = document.createEvent('MouseEvents')
-      ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-      save_link.dispatchEvent(ev)
-    }
+    return this.saveBlob2File(new Blob([inputTxt]))
   }
 
   /**
@@ -134,8 +136,8 @@ export default class BSRunner {
    */
   async generateFile(dataSource) {
     Object.assign(this.config, { data: dataSource })
-    let textContent = await this.worker.doExport();
-    this.saveTxt2File(textContent)
+    let content = await this.worker.doExport();
+    utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)
   }
 
 }

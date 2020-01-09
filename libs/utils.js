@@ -41,26 +41,6 @@ class Utils {
     return this.isNull(obj) || this.isUndefined(obj)
   }
 
-
-
-  /**
-   * 将Blob转成String
-   * @param {Blob} blob
-   * @returns {Promise<String>}
-   */
-  blob2String(blob) {
-    return new Promise((resolve, reject) => {
-      let reader = new FileReader();
-      reader.readAsText(blob);
-      reader.onload = function (e) {
-        resolve(reader.result);
-      }
-      reader.onerror = function (err) {
-        reject(err)
-      }
-    })
-  }
-
 }
 
 export default new Utils()

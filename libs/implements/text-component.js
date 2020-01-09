@@ -8,7 +8,6 @@ export default class TextComponent extends BaseComponent {
 
   /**
    * 导出txt
-   * @param {Array} dataSource
    * @returns {string}
    */
   doExport() {

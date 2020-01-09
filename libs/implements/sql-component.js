@@ -2,15 +2,15 @@ import BaseComponent from "./component";
 
 export default class SqlComponent extends BaseComponent {
 
-  constructor() {
-    super()
+  constructor(config) {
+    super(config)
   }
 
   /**
    * 导出sql
-   * @param {Array} dataSource
    */
-  doExport(dataSource) {
+  doExport() {
+    let dataSource = this.config.data;
     this.makeSureArray(dataSource)
     const data = reshapeData(dataSource)
     const valueFmt = (record) => {
