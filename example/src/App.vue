@@ -1,16 +1,13 @@
 <template>
     <div id="app">
-        <img
-            alt="Vue logo"
-            src="./assets/logo.png"
-        >
-        <button @click="handleExport">导出数据</button>
+        <button @click="handleJson">导出JSON数据</button>
+        <button @click="handleText">导出Text数据</button>
+        <button @click="handleXml">导出XML数据</button>
     </div>
 </template>
 
 <script>
 import exportHelper from "../../index.js";
-console.log(exportHelper);
 export default {
     name: "app",
     methods: {
@@ -95,8 +92,14 @@ export default {
                 }
             ];
         },
-        handleExport() {
+        handleJson() {
             exportHelper("数据源.json", this.fetchData, {});
+        },
+        handleText() {
+            exportHelper("数据源.txt", this.fetchData, {});
+        },
+        handleXml() {
+            exportHelper("数据源.xml", this.fetchData, {});
         }
     }
 };

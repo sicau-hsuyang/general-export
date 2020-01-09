@@ -1,4 +1,4 @@
-import { gen, getDefault } from './libs'
-export default function (filename, dataSource, options = getDefault()) {
-  return gen(filename, dataSource, options)
+import BSRunner from './libs'
+export default function (filename, dataSource, options = {}) {
+  return new BSRunner(filename, dataSource, options)
 }
