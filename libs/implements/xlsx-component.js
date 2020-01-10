@@ -46,6 +46,7 @@ export default class XlsxComponent extends BaseComponent {
     const data = reshapeData(dataSource)
     const excel = new Excel.Workbook()
     excel.created = new Date()
+    excel.creator = "Create by general-export lib"
     const sheet = excel.addWorksheet('Table')
     const exportProps = get()
     const header = exportProps.length === 0 ? Object.keys(data[0]).map(key => {

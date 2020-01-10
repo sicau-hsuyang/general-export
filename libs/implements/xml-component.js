@@ -96,18 +96,25 @@ export default class XmlComponent extends BaseComponent {
   doExport() {
     let dataSource = this.config.data;
     this.makeSureArray(dataSource)
-    const prefix = '<?xml version="1.0" encoding="UTF-8" ?>'
+    const prefix = `<?xml version="1.0" encoding="${this.config.encode}" ?>`
     const data = this.reshapeData(dataSource)
     // 去掉label
-    let exportProps = this.getAvailableProps()
-    if (exportProps.length <= 0) {
-      exportProps = Object.keys(data[0])
+    let outColumns = this.getAvailableProps()
+    if (outColumns.length <= 0) {
+      outColumns = Object.keys(data[0]).map(x => {
+        return {
+          prop: x,
+          label: null
+        }
+      })
+    } else {
+      outColumns = Object.values(this.config.columns)
     }
     var docSchema = this.createXMLSchema()
     if (!docSchema) {
       return
     }
-    var docType = docSchema.createProcessingInstruction('xml', "version='1.0'  encoding='UTF-8'")
+    var docType = docSchema.createProcessingInstruction('xml', `version='1.0'  encoding='${this.config.encode.toUpperCase()}'`)
     // 添加文件头
     docSchema.appendChild(docType)
     var root = docSchema.createElement('List')
@@ -115,12 +122,12 @@ export default class XmlComponent extends BaseComponent {
       const level = docSchema.createElement('Item')
       Object.entries(obj).forEach(([key, val]) => {
         // 如果全部导出 或者 包含导出的key
-        const targetDefine = exportProps.find(x => x.prop === key)
-        if (exportProps.length <= 0 || targetDefine) {
+        const targetDefine = outColumns.find(x => x.prop === key)
+        if (targetDefine) {
           const node = docSchema.createElement(key)
           node.textContent = val
           //todo
-          node.setAttribute('label', targetDefine.label)
+          node.setAttribute('label', targetDefine.label || key)
           level.appendChild(node)
         }
       })

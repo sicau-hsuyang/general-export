@@ -3,6 +3,9 @@
         <button @click="handleJson">导出JSON数据</button>
         <button @click="handleText">导出Text数据</button>
         <button @click="handleXml">导出XML数据</button>
+        <button @click="handleSql">导出Sql数据</button>
+        <button @click="handleCsv">导出csv数据</button>
+        <button @click="handleXlsx">导出Xlsx数据</button>
     </div>
 </template>
 
@@ -96,10 +99,105 @@ export default {
             exportHelper("数据源.json", this.fetchData, {});
         },
         handleText() {
-            exportHelper("数据源.txt", this.fetchData, {});
+            exportHelper("数据源.txt", this.fetchData, {
+                columns: {
+                    id: {
+                        label: "序号"
+                    },
+                    name: {
+                        label: "景点名称"
+                    },
+                    location: {
+                        label: "地址"
+                    },
+                    price: {
+                        label: "门票价格",
+                        formatter(price) {
+                            return price == 0 ? "-" : price;
+                        }
+                    }
+                }
+            });
         },
         handleXml() {
-            exportHelper("数据源.xml", this.fetchData, {});
+            exportHelper("数据源.xml", this.fetchData, {
+                columns: [
+                    { prop: "id", label: "序号" },
+
+                    { prop: "name", label: "景点名称" },
+                    {
+                        prop: "location",
+                        label: "地址"
+                    },
+                    {
+                        prop: "price",
+                        label: "门票价格",
+                        formatter(price) {
+                            return price == 0 ? "-" : price;
+                        }
+                    }
+                ],
+                encode: "gbk"
+            });
+        },
+        handleSql() {
+            exportHelper("数据源.sql", this.fetchData, {
+                columns: [
+                    { prop: "id", label: "序号" },
+
+                    { prop: "name", label: "景点名称" },
+                    {
+                        prop: "location",
+                        label: "地址"
+                    },
+                    {
+                        prop: "price",
+                        label: "门票价格",
+                        formatter(price) {
+                            return price == 0 ? "-" : price;
+                        }
+                    }
+                ],
+                encode: "gbk"
+            });
+        },
+        handleCsv() {
+            exportHelper("数据源.csv", this.fetchData, {
+                // columns: [
+                //     { prop: "id", label: "序号" },
+                //     { prop: "name", label: "景点名称" },
+                //     {
+                //         prop: "location",
+                //         label: "地址"
+                //     },
+                //     {
+                //         prop: "price",
+                //         label: "门票价格",
+                //         formatter(price) {
+                //             return price == 0 ? "-" : price;
+                //         }
+                //     }
+                // ]
+            });
+        },
+        handleXlsx() {
+            exportHelper("数据源.xlsx", this.fetchData, {
+                // columns: [
+                //     { prop: "id", label: "序号" },
+                //     { prop: "name", label: "景点名称" },
+                //     {
+                //         prop: "location",
+                //         label: "地址"
+                //     },
+                //     {
+                //         prop: "price",
+                //         label: "门票价格",
+                //         formatter(price) {
+                //             return price == 0 ? "-" : price;
+                //         }
+                //     }
+                // ]
+            });
         }
     }
 };

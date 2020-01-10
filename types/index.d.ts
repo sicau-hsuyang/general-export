@@ -5,17 +5,15 @@ interface Column {
 
   prop: string;
 
-  formatter: (row: any) => string;
+  formatter: (prop: any, row: any) => string;
 
 }
 
-interface Columns{
+interface Columns {
 
   [key: string]: Column
 
 }
-
-type ExportPropsType = 'all' | Array<Column> | Columns
 
 interface ExportConfig {
 
@@ -28,11 +26,7 @@ interface ExportConfig {
   // object->{ [prop]: 'label' } 或者 { [prop]: { label: '标题', ...otherProps } } 这样的对象
   // 对象数组 { prop: 'age', label: '年纪', ...otherProps }
   // 默认 undefined
-  exportHeaders: undefined | Array<Column> | Columns,
-  // 可选 可以供导出的字段 支持 string 数组 对象
-  // 如果提供了导出标题 则自动忽略此项
-  // 默认 'all'
-  exportProps: ExportPropsType,
+  columns: undefined | Array<Column> | Columns,
   // 文件编码
   // 默认utf-8
   encode: string
@@ -40,10 +34,37 @@ interface ExportConfig {
 }
 
 
+/**
+ * @interface BaseComponent
+ */
 interface BaseComponent {
 
   config: ExportConfig;
 
+  makeSureArray: (dataSource: Array<any>) => throw;
+
+  reshapeData: (row: any) => any
+
   doExport: (dataSource: Array<any>) => string
+
+}
+
+
+/**
+ * @interface BSRunner
+ */
+interface BSRunner {
+
+  gen: (filename: string, dataSource: Array<any>, options: ExportConfig) => void
+
+  getDefault: () => ExportConfig
+
+  workerStrategyFactory: (ext: string) => BaseComponent
+
+  saveBlob2File: (blob: Blob) => void
+
+  saveString2File: (str: string) => void
+
+  generateFile: (dataSource: Array<ant>) => Promise<void>
 
 }

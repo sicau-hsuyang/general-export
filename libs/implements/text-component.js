@@ -14,16 +14,14 @@ export default class TextComponent extends BaseComponent {
     let dataSource = this.config.data;
     this.makeSureArray(dataSource)
     const data = this.reshapeData(dataSource)
-    const valueFmt = (record) => {
-      const values = Object.values(record)
-      return values.map(value => this.stringify(value)).join('\t')
+    let outColumns = this.getAvailableProps()
+    if (outColumns.length <= 0) {
+      outColumns = Object.keys(data[0])
+    } else {
+      outColumns = outColumns.map(x => x.label)
     }
-    let exportHeaders = this.getAvailableProps()
-    if (exportHeaders.length <= 0) {
-      exportHeaders = Object.keys(data[0])
-    }
-    return exportHeaders.join('\t') + '\r\n' + data.map(record => {
-      return valueFmt(record)
+    return outColumns.join('\t') + '\r\n' + data.map(record => {
+      return Object.values(record).map(value => this.stringify(value)).join('\t')
     }).join('\r\n')
   }
 

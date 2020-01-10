@@ -51,16 +51,27 @@ export default class BaseComponent {
     // 如果指定了header上面 则直接从headers生成
     // 对于空数组 默认认为可以导出全部
     let props = null;
-    if (utils.isString(this.config.exportProps) && this.config.exportProps === 'all') {
+    if (this.utils.isUndefined(this.config.columns)) {
       props = []
     }
     //如果是对象
-    else if (utils.isObject(this.config.exportProps)) {
-      props = Object.keys(this.config.exportProps)
+    else if (utils.isObject(this.config.columns)) {
+      props = Object.entries(this.config.columns).map(([prop, value]) => {
+        this.config.columns[prop].prop = prop
+        return {
+          ...value, prop
+        }
+      })
     }
     //如果是Array<string>数组
-    else if (Array.isArray(this.config.exportProps)) {
-      props = this.config.exportProps;
+    else if (Array.isArray(this.config.columns)) {
+      //将其构造成 hash形式
+      let mapping = {}
+      this.config.columns.forEach(column => {
+        mapping[column.prop] = column
+      })
+      this.config.columns = mapping
+      props = Object.values(this.config.columns)
     }
 
     return props;
@@ -102,18 +113,23 @@ export default class BaseComponent {
 
   // 放缩 对象的属性
   mappingRow(record) {
-    const exportProps = this.getAvailableProps()
+    const outColumns = this.getAvailableProps()
     // 如果exportProps是空数组，则认为导出全部数据
-    if (exportProps.length === 0) {
+    if (outColumns.length === 0) {
       // 如果是带有colSpan 和 rowSpan的数据 需要进行缩小 仅仅只需要取value字段
       return this.isObjRow(record) ? this.shrinkRow(record) : record;
     } else {
       // 否则需要映射数据
       const newObj = {};
-      Object.entries(record).forEach(([key, propData]) => {
+      Object.entries(record).forEach(([prop, propData]) => {
+        let defineNode = this.config.columns[prop]
+        if (defineNode) {
+          let col = this.isObjCol(propData) ? propData.value : propData
+          let row = this.isObjRow(record) ? this.shrinkRow(record) : record
+          let formatter = defineNode.formatter
+          newObj[prop] = typeof formatter === 'function' ? formatter(col, row) : col;
+        }
         // 如果是带有 colSpan 和 rowSpan的数据 则需要 取value字段
-        exportProps.includes(key) &&
-          (newObj[key] = this.isObjCol(propData) ? propData.value : propData);
       });
       return newObj;
     }

@@ -36,11 +36,7 @@ export default class BSRunner {
       // object->{ [prop]: 'label' } 或者 { [prop]: { label: '标题', ...otherProps } } 这样的对象
       // 对象数组 { prop: 'age', label: '年纪', ...otherProps }
       // 默认 undefined
-      exportHeaders: undefined,
-      // 可选 可以供导出的字段 支持 string 数组 对象
-      // 如果提供了导出标题 则自动忽略此项
-      // 默认 'all'
-      exportProps: 'all',
+      columns: undefined,
       // 文件编码
       // 默认utf-8
       encode: 'utf-8'
@@ -90,7 +86,8 @@ export default class BSRunner {
       case 'xml':
         this.worker = new XmlComponent(this.config)
         break
-      case 'excel':
+      case 'xls':
+      case 'xlsx':
         this.worker = new XlsxComponent(this.config);
         break
       case 'csv':
@@ -102,6 +99,11 @@ export default class BSRunner {
     }
   }
 
+
+  /**
+   * 将Blob导出至文件
+   * @param {Blob} blob
+   */
   saveBlob2File(blob) {
     let filename = this.config.filename
     var urlObject = window.URL || window.webkitURL
@@ -123,7 +125,7 @@ export default class BSRunner {
 
 
   /**
-   * 导出数据方法
+   * 将txt导出至文件
    * @param {String} inputTxt
    */
   saveTxt2File(inputTxt) {
@@ -135,6 +137,7 @@ export default class BSRunner {
    * @param {Array<Object>} dataSource 导出数据源
    */
   async generateFile(dataSource) {
+    // 设置配置项目中的数据
     Object.assign(this.config, { data: dataSource })
     let content = await this.worker.doExport();
     utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)

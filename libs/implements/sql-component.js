@@ -12,13 +12,17 @@ export default class SqlComponent extends BaseComponent {
   doExport() {
     let dataSource = this.config.data;
     this.makeSureArray(dataSource)
-    const data = reshapeData(dataSource)
+    const data = this.reshapeData(dataSource)
     const valueFmt = (record) => {
       const values = Object.values(record)
-      return '(' + values.map(value => stringify(value)).join(',') + ')'
+      return '(' + values.map(value => this.stringify(value)).join(',') + ')'
     }
-    const props = Object.keys(data[0]).map(prop => {
-      return '`' + prop + '`'
+    let outColumns = this.getAvailableProps()
+    if (outColumns.length === 0) {
+      outColumns = Object.keys(data[0])
+    }
+    const props = outColumns.map(column => {
+      return '`' + column.prop + '`'
     }).join(',')
     const values = data.map(record => valueFmt(record)).join(',')
     return `INSERT INTO \`Table\` (${props}) VALUES ${values}`
