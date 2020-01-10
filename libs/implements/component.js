@@ -2,6 +2,9 @@ import utils from "../utils"
 
 export default class BaseComponent {
 
+  /**
+   * @type ExportConfig
+   */
   config = null;
 
   get utils() {
@@ -17,7 +20,27 @@ export default class BaseComponent {
    * @returns {Array<string>}
    */
   getExportHeaders() {
+    // 支持数组
+    /*[{
+      label: '字段',
+      prop: 'prop',
+      formatter(row) {
 
+      }
+    }]
+
+    或者是
+
+    {
+      prop: {
+       label: '字段',
+       formatter(row) {
+
+       }
+      }
+    }
+
+    */
   }
 
   /**
@@ -25,7 +48,7 @@ export default class BaseComponent {
    * @returns {Array<string>}
    */
   getAvailableProps() {
-
+    // 如果指定了header上面 则直接从headers生成
     // 对于空数组 默认认为可以导出全部
     let props = null;
     if (utils.isString(this.config.exportProps) && this.config.exportProps === 'all') {
