@@ -11,11 +11,12 @@ export default class BSRunner {
   /**
    * @type { BaseComponent }
    */
-  worker = null
+  worker
 
-  config = {}
+  config
 
   constructor(filename, dataSource, options) {
+    this.config = {}
     let ext = this.getExtByFilename(filename);
     this.workerStrategyFactory(ext);
     this.gen(filename, dataSource, options)

@@ -1,0 +1,34 @@
+{
+  "name": "general-export",
+  "version": "0.0.1",
+  "description": "This is a JavaScript file export library running on the browser side, which can support XML, json, text, SQL, CSV, XLSX and other file formats.",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "dependencies": {
+    "exceljs": "^3.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sicau-HsuYang/general-export.git"
+  },
+  "keywords": [
+    "json2file",
+    "json2xml",
+    "json2csv",
+    "json2xlsx",
+    "json2text",
+    "json2sql"
+  ],
+  "author": "john yang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Sicau-HsuYang/general-export/issues"
+  },
+  "homepage": "https://github.com/Sicau-HsuYang/general-export#readme"
+}

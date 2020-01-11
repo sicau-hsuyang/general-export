@@ -1,4 +1,4 @@
-import BaseComponent from "./component";
+import BaseComponent from "../component";
 
 export default class SqlComponent extends BaseComponent {
 

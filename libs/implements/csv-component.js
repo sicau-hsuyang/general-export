@@ -1,11 +1,13 @@
-
-import Excel from 'exceljs'
-import BaseComponent from "./component";
+// import ExcelJS from 'exceljs'
+import BaseComponent from "../component";
 
 export default class CsvComponent extends BaseComponent {
 
   constructor(config) {
     super(config)
+    if (typeof ExcelJS === 'undefined') {
+      throw new Error("this module require module which named exceljs, please run bash `npm install exceljs -S`")
+    }
   }
 
   /**
@@ -24,7 +26,7 @@ export default class CsvComponent extends BaseComponent {
     let dataSource = this.config.data;
     this.makeSureArray(dataSource)
     const data = this.reshapeData(dataSource)
-    const excel = new Excel.Workbook()
+    const excel = new ExcelJS.Workbook()
     excel.created = new Date()
     excel.creator = "Create by general-export lib"
     const sheet = excel.addWorksheet('Table')

@@ -1,4 +1,4 @@
-import utils from "../utils"
+import utils from "./utils"
 
 export default class BaseComponent {
 
@@ -99,6 +99,8 @@ export default class BaseComponent {
           let row = this.isObjRow(record) ? this.shrinkRow(record) : record
           let formatter = defineNode.formatter
           newObj[prop] = typeof formatter === 'function' ? formatter(col, row) : col;
+        } else {
+          throw `[the data has unknown prop->[${prop}]], please check up]`
         }
         // 如果是带有 colSpan 和 rowSpan的数据 则需要 取value字段
       });

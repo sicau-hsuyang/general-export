@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>general-export</title>
+  <style>
+    .container {
+      text-align: center;
+    }
+
+    .container button {
+      display: inline-block;
+    }
+  </style>
+</head>
+
+<body>
+  <h1 align="center">hello guy!</h1>
+  <hr>
+  <h2 align="center">I'm very glad to have your support</h2>
+  <div class="container">
+    <button id="json">export2json</button>
+    <button id="xml">export2xml</button>
+    <button id="text">export2txt</button>
+    <button id="sql">export2sql</button>
+    <button id="csv">export2csv</button>
+    <button id="xlsx">export2excel</button>
+  </div>
+  <script src="https://cdn.bootcss.com/exceljs/3.0.0/exceljs.js"></script>
+  <script src="../../dist/main.js"></script>
+  <script>
+    let utils = bsGeneralExport.default;
+    function requestData() {
+      return [
+        {
+          id: 1,
+          name: "螺髻山",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "普格县",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 100
+        },
+        {
+          id: 2,
+          name: "邛海",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "西昌市",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 25
+        },
+        {
+          id: 3,
+          name: "大风顶",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "雷波县",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 200
+        },
+        {
+          id: 4,
+          name: "泸山",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "西昌市",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 100
+        },
+        {
+          id: 5,
+          name: "西昌古城",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "西昌市",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: false,
+          price: 0
+        },
+        {
+          id: 6,
+          name: "马湖",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "雷波县",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: false,
+          price: 0
+        },
+        {
+          id: 7,
+          name: "会理古城",
+          province: "四川省",
+          city: "凉山彝族自治州",
+          country: "会理县",
+          location: "四川省凉山彝族自治州",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: false,
+          price: 0
+        },
+        {
+          id: 8,
+          name: "春熙路",
+          province: "四川省",
+          city: "成都市",
+          country: "锦江区",
+          location: "四川省成都市",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: false,
+          price: 0
+        },
+        {
+          id: 10,
+          name: "都江堰",
+          province: "四川省",
+          city: "成都市",
+          country: "都江堰市",
+          location: "四川省成都市",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 70
+        },
+        {
+          id: 9,
+          name: "玉屏山",
+          province: "四川省",
+          city: "眉山市",
+          country: "洪雅县",
+          location: "四川省眉山市",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 90
+        },
+        {
+          id: 11,
+          name: "乐山大佛",
+          province: "四川省",
+          city: "乐山市",
+          country: "市中区",
+          location: "四川省乐山市",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 60
+        },
+        {
+          id: 12,
+          name: "峨眉山",
+          province: "四川省",
+          city: "乐山市",
+          country: "峨眉山市",
+          location: "四川省乐山市",
+          position: {
+            lat: null,
+            lng: null
+          },
+          isTicket: true,
+          price: 180
+        }]
+    }
+
+    let json = document.getElementById("json");
+    let xml = document.getElementById("xml");
+    let text = document.getElementById("text")
+    let sql = document.getElementById("sql");
+    let csv = document.getElementById("csv")
+    let xlsx = document.getElementById("xlsx")
+
+    json.addEventListener("click", function () {
+      utils("数据源.json", requestData)
+    })
+
+    csv.addEventListener("click", function () {
+      utils("数据源.csv", requestData)
+    })
+
+    xlsx.addEventListener("click", function () {
+      utils("数据源.xlsx", requestData)
+    })
+
+  </script>
+</body>
+
+</html>
