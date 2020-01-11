@@ -8,6 +8,17 @@ export default class CsvComponent extends BaseComponent {
     super(config)
   }
 
+  /**
+   * excel和 csv序列化 yyyy/MM/dd
+   * @param {Date} date
+   */
+  stringifyDate(date) {
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1
+    let day = date.getDate();
+    return year + "/" + month + "/" + day
+  }
+
   async doExport() {
     let csvStr = null
     let dataSource = this.config.data;

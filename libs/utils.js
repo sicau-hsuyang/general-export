@@ -18,7 +18,15 @@ class Utils {
    * @returns {Boolean}
    */
   isPromise(obj) {
-    return obj && typeof obj.then === 'function'
+    return toString.call(obj) === '[object Promise]'
+  }
+
+  isDate(obj) {
+    return toString.call(obj) === '[object Date]'
+  }
+
+  isRegExp(obj) {
+    return toString.call(obj) === '[object RegExp]'
   }
 
   isUndefined(obj) {

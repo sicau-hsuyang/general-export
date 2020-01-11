@@ -88,8 +88,6 @@ export default class XmlComponent extends BaseComponent {
     return xmlSchema
   }
 
-
-  // todo 处理header 和 props 的映射关系  2020/1/9
   /**
    * 导出XML
    */
@@ -98,7 +96,6 @@ export default class XmlComponent extends BaseComponent {
     this.makeSureArray(dataSource)
     const prefix = `<?xml version="1.0" encoding="${this.config.encode}" ?>`
     const data = this.reshapeData(dataSource)
-    // 去掉label
     let outColumns = this.getAvailableProps()
     if (outColumns.length <= 0) {
       outColumns = Object.keys(data[0]).map(x => {

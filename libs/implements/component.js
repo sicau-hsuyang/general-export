@@ -3,9 +3,9 @@ import utils from "../utils"
 export default class BaseComponent {
 
   /**
-   * @type ExportConfig
+   * @type {ExportConfig}
    */
-  config = null;
+  config;
 
   get utils() {
     return utils
@@ -16,39 +16,10 @@ export default class BaseComponent {
   }
 
   /**
-   * 获取导出的标题
-   * @returns {Array<string>}
-   */
-  getExportHeaders() {
-    // 支持数组
-    /*[{
-      label: '字段',
-      prop: 'prop',
-      formatter(row) {
-
-      }
-    }]
-
-    或者是
-
-    {
-      prop: {
-       label: '字段',
-       formatter(row) {
-
-       }
-      }
-    }
-
-    */
-  }
-
-  /**
    * 获取可以导出的字段
    * @returns {Array<string>}
    */
   getAvailableProps() {
-    // 如果指定了header上面 则直接从headers生成
     // 对于空数组 默认认为可以导出全部
     let props = null;
     if (this.utils.isUndefined(this.config.columns)) {
@@ -112,7 +83,7 @@ export default class BaseComponent {
   }
 
   // 放缩 对象的属性
-  mappingRow(record) {
+  mappingRows(record) {
     const outColumns = this.getAvailableProps()
     // 如果exportProps是空数组，则认为导出全部数据
     if (outColumns.length === 0) {
@@ -151,7 +122,7 @@ export default class BaseComponent {
       if (!utils.isObject(record)) {
         throw `[the row-data must be an object type,please check your datasource]`
       }
-      return this.mappingRow(record)
+      return this.mappingRows(record)
     });
   }
 
@@ -163,6 +134,10 @@ export default class BaseComponent {
    */
   doExport(dataSource) {
     throw `[the do-work method must be implemented]`
+  }
+
+  stringifyDate(value) {
+    return value.getTime();
   }
 
 
@@ -177,8 +152,11 @@ export default class BaseComponent {
       return 'null'
     } else if (utils.isObject(value) || utils.isString(value)) {
       return JSON.stringify(value)
+    } else if (utils.isRegExp(value)) {
+      return value.toString()
+    } else if (utils.isDate(value)) {
+      return this.stringifyDate(value)
     } else {
-      //todo 2020/1/ 正则 和 日期 函数
       return value
     }
   }

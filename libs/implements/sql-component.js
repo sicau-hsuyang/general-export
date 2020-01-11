@@ -28,4 +28,11 @@ export default class SqlComponent extends BaseComponent {
     return `INSERT INTO \`Table\` (${props}) VALUES ${values}`
   }
 
+  /**
+   * sql 序列化时候 序列化成后端常见的时间戳
+   */
+  stringifyDate(date) {
+    return date.getTime() / 1000
+  }
+
 }
