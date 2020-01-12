@@ -10,7 +10,8 @@
 </template>
 
 <script>
-import exportHelper from "../../index.js";
+import exportHelper from "../../../index.js";
+console.log(exportHelper);
 export default {
     name: "app",
     methods: {
@@ -342,22 +343,22 @@ export default {
         },
         handleXml() {
             exportHelper("数据源.xml", this.fetchData, {
-                columns: [
-                    { prop: "id", label: "序号" },
+                // columns: [
+                //     { prop: "id", label: "序号" },
 
-                    { prop: "name", label: "景点名称" },
-                    {
-                        prop: "location",
-                        label: "地址"
-                    },
-                    {
-                        prop: "price",
-                        label: "门票价格",
-                        formatter(price) {
-                            return price == 0 ? "-" : price;
-                        }
-                    }
-                ],
+                //     { prop: "name", label: "景点名称" },
+                //     {
+                //         prop: "location",
+                //         label: "地址"
+                //     },
+                //     {
+                //         prop: "price",
+                //         label: "门票价格",
+                //         formatter(price) {
+                //             return price == 0 ? "-" : price;
+                //         }
+                //     }
+                // ],
                 encode: "gbk"
             });
         },

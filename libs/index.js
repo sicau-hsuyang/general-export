@@ -1,12 +1,13 @@
-import SqlComponent from "./implements/sql-component"
-import TextComponent from "./implements/text-component"
-import JsonComponent from "./implements/json-component"
-import XmlComponent from "./implements/xml-component"
-import XlsxComponent from "./implements/xlsx-component"
-import CsvComponent from "./implements/csv-component"
-import utils from "./utils"
-
-export default class BSRunner {
+const SqlComponent = require("./implements/sql-component");
+const TextComponent = require("./implements/text-component");
+const JsonComponent = require("./implements/json-component");
+const XmlComponent = require("./implements/xml-component");
+const XlsxComponent = require("./implements/xlsx-component");
+const CsvComponent = require("./implements/csv-component");
+const utils = require("./utils");
+const path = require("path")
+const fs = require("fs")
+class BSRunner {
 
   /**
    * @type { BaseComponent }
@@ -100,37 +101,51 @@ export default class BSRunner {
     }
   }
 
-
   /**
    * 将Blob导出至文件
    * @param {Blob} blob
    */
   saveBlob2File(blob) {
     let filename = this.config.filename
-    var urlObject = window.URL || window.webkitURL
-    if (!urlObject || utils.isUndefined(Blob)) {
+    var urlObject = URL || webkitURL
+    if (!urlObject || typeof Blob === 'undefined') {
       throw ('当前JS环境无法导出!')
     }
     // 对于IE10以上
-    if (window.navigator.msSaveBlob) {
-      window.navigator.msSaveBlob(blob, filename)
+    if (navigator.msSaveBlob) {
+      navigator.msSaveBlob(blob, filename)
     } else {
       var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
       save_link.href = urlObject.createObjectURL(blob)
       save_link.download = filename
-      var ev = document.createEvent('MouseEvents')
-      ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-      save_link.dispatchEvent(ev)
+      // var ev = document.createEvent('MouseEvents')
+      // ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+      // save_link.dispatchEvent(ev)
+      save_link.click()
     }
   }
 
+
+  saveFile(txt, savePath) {
+    let filePath = savePath
+    if (filePath && !fs.existsSync(filePath)) {
+      throw `[${filePath} is not exist, please check up]`
+    } else {
+      filePath = process.cwd();
+      if (!fs.existsSync(path.resolve(filePath, "exports"))) {
+        fs.mkdirSync("exports")
+      }
+      filePath = path.resolve(filePath, "exports")
+    }
+    fs.writeFileSync(filePath + "/" + this.config.filename, txt)
+  }
 
   /**
    * 将txt导出至文件
    * @param {String} inputTxt
    */
   saveTxt2File(inputTxt) {
-    return this.saveBlob2File(new Blob([inputTxt]))
+    return utils.isNodeEnv() ? this.saveFile(inputTxt) : this.saveBlob2File(new Blob([inputTxt]))
   }
 
   /**
@@ -145,3 +160,5 @@ export default class BSRunner {
   }
 
 }
+
+module.exports = BSRunner

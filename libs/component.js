@@ -1,6 +1,6 @@
-import utils from "./utils"
+const utils = require("./utils")
 
-export default class BaseComponent {
+class BaseComponent {
 
   /**
    * @type {ExportConfig}
@@ -22,7 +22,7 @@ export default class BaseComponent {
   getAvailableProps() {
     // 对于空数组 默认认为可以导出全部
     let props = null;
-    if (this.utils.isUndefined(this.config.columns)) {
+    if (!this.config.columns) {
       props = []
     }
     //如果是对象
@@ -55,9 +55,9 @@ export default class BaseComponent {
   isObjCol(obj) {
     return (
       Object.keys(obj).length === 3 &&
-      !this.utils.isUndefined(obj.colSpan) &&
-      !this.utils.isUndefined(obj.rowSpan) &&
-      !this.utils.isUndefined(obj.value)
+      obj.colSpan &&
+      obj.rowSpan &&
+      obj.value
     );
   }
 
@@ -99,8 +99,6 @@ export default class BaseComponent {
           let row = this.isObjRow(record) ? this.shrinkRow(record) : record
           let formatter = defineNode.formatter
           newObj[prop] = typeof formatter === 'function' ? formatter(col, row) : col;
-        } else {
-          throw `[the data has unknown prop->[${prop}]], please check up]`
         }
         // 如果是带有 colSpan 和 rowSpan的数据 则需要 取value字段
       });
@@ -148,7 +146,7 @@ export default class BaseComponent {
    * @param {any} value 序列化内容
    */
   stringify(value) {
-    if (utils.isUndefined(value)) {
+    if (typeof value === 'undefined') {
       return 'undefined'
     } else if (utils.isNull(value)) {
       return 'null'
@@ -164,3 +162,5 @@ export default class BaseComponent {
   }
 
 }
+
+module.exports = BaseComponent

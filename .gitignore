@@ -1,8 +1,8 @@
 .DS_Store
 node_modules
-/dist
 /webpack-builder
 /example/webpack/node_modules
+/example/nodejs/exports
 /tests/e2e/reports/
 selenium-debug.log
 chromedriver.log

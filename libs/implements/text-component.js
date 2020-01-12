@@ -1,6 +1,5 @@
-import BaseComponent from "../component";
-
-export default class TextComponent extends BaseComponent {
+const BaseComponent = require("../component");
+class TextComponent extends BaseComponent {
 
   constructor(config) {
     super(config)
@@ -26,3 +25,5 @@ export default class TextComponent extends BaseComponent {
   }
 
 }
+
+module.exports = TextComponent

@@ -3,6 +3,13 @@ const toString = Object.prototype.toString
 class Utils {
 
   /**
+   * 判断程序运行在nodejs环境还是浏览器环境
+   */
+  isNodeEnv() {
+    return typeof window === 'undefined'
+  }
+
+  /**
    * 是否是Blob类型
    * @param {Object} obj
    * @returns {Boolean}
@@ -29,10 +36,6 @@ class Utils {
     return toString.call(obj) === '[object RegExp]'
   }
 
-  isUndefined(obj) {
-    return typeof obj === 'undefined'
-  }
-
   isObject(obj) {
     return toString.call(obj) === '[object Object]'
   }
@@ -46,9 +49,17 @@ class Utils {
   }
 
   isNullOrUndefined(obj) {
-    return this.isNull(obj) || this.isUndefined(obj)
+    return this.isNull(obj) || typeof obj === 'undefined'
+  }
+
+  stringToUint8Array(str) {
+    var arr = [];
+    for (var i = 0, j = str.length; i < j; ++i) {
+      arr.push(str.charCodeAt(i));
+    }
+    return new Uint8Array(arr)
   }
 
 }
 
-export default new Utils()
+module.exports = new Utils()

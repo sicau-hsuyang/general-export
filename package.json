@@ -7,6 +7,7 @@
     "example": "example"
   },
   "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.8.0",
     "exceljs": "^3.5.0"
   },
   "devDependencies": {},

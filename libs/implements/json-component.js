@@ -1,6 +1,5 @@
-import BaseComponent from "../component";
-
-export default class JsonComponent extends BaseComponent {
+const BaseComponent = require("../component");
+class JsonComponent extends BaseComponent {
 
   constructor(config) {
     super(config)
@@ -19,3 +18,5 @@ export default class JsonComponent extends BaseComponent {
   }
 
 }
+
+module.exports = JsonComponent

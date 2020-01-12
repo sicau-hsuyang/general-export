@@ -30,9 +30,9 @@
     <button id="xlsx">export2excel</button>
   </div>
   <script src="https://cdn.bootcss.com/exceljs/3.0.0/exceljs.js"></script>
-  <script src="../../dist/main.js"></script>
+  <script src="../../dist/main.web.js"></script>
   <script>
-    let utils = bsGeneralExport.default;
+    let utils = GeneralExport;
     function requestData() {
       return [
         {
@@ -222,6 +222,18 @@
 
     xlsx.addEventListener("click", function () {
       utils("数据源.xlsx", requestData)
+    })
+
+    xml.addEventListener("click", function () {
+      utils("数据源.xml", requestData)
+    })
+
+    text.addEventListener("click", function () {
+      utils("数据源.txt", requestData)
+    })
+
+    sql.addEventListener("click", function () {
+      utils("数据源.sql", requestData)
     })
 
   </script>

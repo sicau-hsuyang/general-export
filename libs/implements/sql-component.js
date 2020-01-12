@@ -1,6 +1,5 @@
-import BaseComponent from "../component";
-
-export default class SqlComponent extends BaseComponent {
+const BaseComponent = require("../component");
+class SqlComponent extends BaseComponent {
 
   constructor(config) {
     super(config)
@@ -10,6 +9,7 @@ export default class SqlComponent extends BaseComponent {
    * 导出sql
    */
   doExport() {
+
     let dataSource = this.config.data;
     this.makeSureArray(dataSource)
     const data = this.reshapeData(dataSource)
@@ -19,7 +19,9 @@ export default class SqlComponent extends BaseComponent {
     }
     let outColumns = this.getAvailableProps()
     if (outColumns.length === 0) {
-      outColumns = Object.keys(data[0])
+      outColumns = Object.keys(data[0]).map(x => ({
+        prop: x,
+      }))
     }
     const props = outColumns.map(column => {
       return '`' + column.prop + '`'
@@ -36,3 +38,6 @@ export default class SqlComponent extends BaseComponent {
   }
 
 }
+
+
+module.exports = SqlComponent

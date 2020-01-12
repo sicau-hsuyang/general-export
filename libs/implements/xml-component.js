@@ -1,6 +1,6 @@
-import BaseComponent from "../component";
+const BaseComponent = require("../component");
 
-export default class XmlComponent extends BaseComponent {
+class XmlComponent extends BaseComponent {
 
   constructor(config) {
     super(config)
@@ -77,7 +77,7 @@ export default class XmlComponent extends BaseComponent {
    */
   createXMLSchema() {
     var xmlSchema = null
-    if (!this.utils.isUndefined(window.ActiveXObject)) {
+    if (typeof ActiveXObject !== 'undefined') {
       xmlSchema = new ActiveXObject('Microsoft.XMLDOM')
     } else if (document.implementation &&
       document.implementation.createDocument) {
@@ -88,12 +88,7 @@ export default class XmlComponent extends BaseComponent {
     return xmlSchema
   }
 
-  /**
-   * 导出XML
-   */
-  doExport() {
-    let dataSource = this.config.data;
-    this.makeSureArray(dataSource)
+  exportXmlInBrowser(dataSource) {
     const prefix = `<?xml version="1.0" encoding="${this.config.encode}" ?>`
     const data = this.reshapeData(dataSource)
     let outColumns = this.getAvailableProps()
@@ -134,4 +129,20 @@ export default class XmlComponent extends BaseComponent {
     return this.formatXml(prefix + serializer.serializeToString(root))
   }
 
+  exportXmlInNode(dataSource) {
+    // todo
+    console.log('export in nodejs')
+  }
+
+  /**
+   * 导出XML
+   */
+  doExport() {
+    let dataSource = this.config.data;
+    this.makeSureArray(dataSource)
+    return this.utils.isNodeEnv() ? this.exportXmlInNode(dataSource) : this.exportXmlInBrowser(dataSource)
+  }
+
 }
+
+module.exports = XmlComponent;

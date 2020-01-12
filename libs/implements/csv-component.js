@@ -1,7 +1,6 @@
-// import ExcelJS from 'exceljs'
-import BaseComponent from "../component";
-
-export default class CsvComponent extends BaseComponent {
+const ExcelJS = require('exceljs');
+const BaseComponent = require("../component");
+class CsvComponent extends BaseComponent {
 
   constructor(config) {
     super(config)
@@ -54,3 +53,5 @@ export default class CsvComponent extends BaseComponent {
   }
 
 }
+
+module.exports = CsvComponent

@@ -1,4 +1,4 @@
-import BSRunner from './libs'
-export default function (filename, dataSource, options = {}) {
+const BSRunner = require('./libs')
+module.exports = function (filename, dataSource, options = {}) {
   return new BSRunner(filename, dataSource, options)
 }
