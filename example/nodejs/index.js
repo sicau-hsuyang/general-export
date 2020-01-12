@@ -84,6 +84,6 @@ function fetchData() {
 GeneralExport('数据源.csv', fetchData)
 GeneralExport('数据源.xml', fetchData)
 GeneralExport('数据源.txt', fetchData)
-// GeneralExport("数据源.xlsx", fetchData)
+GeneralExport("数据源.xlsx", fetchData)
 GeneralExport("数据源.sql", fetchData)
 GeneralExport("数据源.json", data)

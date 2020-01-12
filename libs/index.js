@@ -156,7 +156,7 @@ class BSRunner {
     // 设置配置项目中的数据
     Object.assign(this.config, { data: dataSource })
     let content = await this.worker.doExport();
-    utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)
+    typeof Buffer !== undefined && Buffer.isBuffer(content) ? this.saveFile(content) : utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)
   }
 
 }

@@ -125,7 +125,7 @@ class XlsxComponent extends BaseComponent {
       console.error(exp)
       console.error('[ the error has occurred when exporting or the browser can not support export]')
     }
-    return new Blob([buffer]);
+    return typeof Blob !== undefined ? buffer : new Blob([buffer]);
   }
 
 }
