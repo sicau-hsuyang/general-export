@@ -1,7 +1,7 @@
 const utils = require('./utils.js');
 class JsonToXmlSerilizer {
   constructor(json) {
-    this.json = json;
+    this.json = JSON.decycle(json);
   }
 
   /**
@@ -47,7 +47,13 @@ class JsonToXmlSerilizer {
       );
       return innerSchema;
     }
-    if (this.isBasicEle(objValue)) {
+    if (
+      objValue instanceof Boolean ||
+      objValue instanceof Number ||
+      objValue instanceof String ||
+      this.isBasicEle(objValue)
+    ) {
+      objValue = objValue.valueOf()
       // 处理函数 undefined Symbol
       if (['function', 'undefined', 'symbol'].includes(typeof objValue)) {
         innerSchema = '[this schema cannot be stringify]';
@@ -69,7 +75,7 @@ class JsonToXmlSerilizer {
         });
         // 对于数组 需要做成
         // <element /> <element/> <element/> 因此 直接return
-        return innerSchema
+        return innerSchema;
       } else {
         Object.entries(objValue).forEach(([chhildProp, value]) => {
           innerSchema += this.serilizeElement(chhildProp, value);
@@ -179,8 +185,11 @@ class JsonToXmlSerilizer {
     let bodySchema = '';
     // xml只能有一个根节点 因此需要手动添加 root 节点 使之成为根节点
     bodySchema += '<root>';
-    if (this.isBasicEle(this.json)) {
-      bodySchema += this.json;
+    if (this.json instanceof Boolean ||
+      this.json instanceof Number ||
+      this.json instanceof String ||
+      this.isBasicEle(this.json)) {
+      bodySchema += this.json.valueOf();
     } else {
       if (Array.isArray(this.json)) {
         this.json.forEach((ele, idx) => {
