@@ -130,7 +130,7 @@ class BaseComponent {
    * 基类方法 导出核心方法 必须由子类实现
    * @param {Array<Object>} dataSource
    * @throws 抛出没有实现的方法
-   * @returns {String|Blob}
+   * @returns {String|Blob|Buffer}
    */
   doExport(dataSource) {
     throw `[the do-work method must be implemented]`

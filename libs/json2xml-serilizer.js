@@ -1,6 +1,11 @@
+require('./extension/decycle.js');
 const utils = require('./utils.js');
 class JsonToXmlSerilizer {
   constructor(json) {
+    this.setData(json)
+  }
+
+  setData(json) {
     this.json = JSON.decycle(json);
   }
 
@@ -53,7 +58,7 @@ class JsonToXmlSerilizer {
       objValue instanceof String ||
       this.isBasicEle(objValue)
     ) {
-      objValue = objValue.valueOf()
+      objValue = objValue && typeof objValue.valueOf === 'function' ?  objValue.valueOf() : objValue
       // 处理函数 undefined Symbol
       if (['function', 'undefined', 'symbol'].includes(typeof objValue)) {
         innerSchema = '[this schema cannot be stringify]';
@@ -192,8 +197,8 @@ class JsonToXmlSerilizer {
       bodySchema += this.json.valueOf();
     } else {
       if (Array.isArray(this.json)) {
-        this.json.forEach((ele, idx) => {
-          bodySchema += this.serilizeElement(idx, ele);
+        this.json.forEach((ele) => {
+          bodySchema += this.serilizeElement("Item", ele);
         });
       } else {
         Object.entries(this.json).forEach(([prop, value]) => {

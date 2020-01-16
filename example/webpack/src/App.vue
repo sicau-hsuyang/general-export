@@ -343,22 +343,21 @@ export default {
         },
         handleXml() {
             exportHelper("数据源.xml", this.fetchData, {
-                // columns: [
-                //     { prop: "id", label: "序号" },
-
-                //     { prop: "name", label: "景点名称" },
-                //     {
-                //         prop: "location",
-                //         label: "地址"
-                //     },
-                //     {
-                //         prop: "price",
-                //         label: "门票价格",
-                //         formatter(price) {
-                //             return price == 0 ? "-" : price;
-                //         }
-                //     }
-                // ],
+                columns: [
+                    { prop: "id", label: "序号" },
+                    { prop: "name", label: "景点名称" },
+                    {
+                        prop: "location",
+                        label: "地址"
+                    },
+                    {
+                        prop: "price",
+                        label: "门票价格",
+                        formatter(price) {
+                            return price == 0 ? "-" : price;
+                        }
+                    }
+                ],
                 encode: "gbk"
             });
         },

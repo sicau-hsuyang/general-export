@@ -32,8 +32,7 @@
   <script src="https://cdn.bootcss.com/exceljs/3.0.0/exceljs.js"></script>
   <script src="../../dist/main.web.js"></script>
   <script>
-    let utils = GeneralExport;
-    function requestData() {
+   function requestData() {
       return [
         {
           id: 1,
@@ -209,31 +208,31 @@
     let xml = document.getElementById("xml");
     let text = document.getElementById("text")
     let sql = document.getElementById("sql");
-    let csv = document.getElementById("csv")
-    let xlsx = document.getElementById("xlsx")
+    let csv = document.getElementById("csv");
+    let xlsx = document.getElementById("xlsx");
 
-    json.addEventListener("click", function () {
-      utils("数据源.json", requestData)
+    json.addEventListener('click', function () {
+      GeneralExport('数据源.json', requestData)
     })
 
-    csv.addEventListener("click", function () {
-      utils("数据源.csv", requestData)
+    xml.addEventListener('click', function () {
+      GeneralExport('数据源.xml', requestData)
     })
 
-    xlsx.addEventListener("click", function () {
-      utils("数据源.xlsx", requestData)
+    text.addEventListener('click', function () {
+      GeneralExport('数据源.txt', requestData)
     })
 
-    xml.addEventListener("click", function () {
-      utils("数据源.xml", requestData)
+    sql.addEventListener('click', function () {
+      GeneralExport('数据源.sql', requestData)
     })
 
-    text.addEventListener("click", function () {
-      utils("数据源.txt", requestData)
+    csv.addEventListener('click', function () {
+      GeneralExport('数据源.csv', requestData)
     })
 
-    sql.addEventListener("click", function () {
-      utils("数据源.sql", requestData)
+    csv.addEventListener('click', function () {
+      GeneralExport('数据源.xlsx', requestData)
     })
 
   </script>

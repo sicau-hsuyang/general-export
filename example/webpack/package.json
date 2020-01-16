@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "core-js": "^3.4.4",
+    "exceljs": "^3.5.0",
     "vue": "^2.6.10"
   },
   "devDependencies": {

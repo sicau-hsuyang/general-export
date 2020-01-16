@@ -1,4 +1,3 @@
-require("./extension/decycle.js")
 const JsonToXmlSerilizer = require("./json2xml-serilizer");
 var json = {
   name: '杨旭',
