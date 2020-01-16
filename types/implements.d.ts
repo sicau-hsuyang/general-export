@@ -1,3 +1,28 @@
+interface Json2XMLSerilizer {
+
+  // 设置需要导出到XML的数据
+  setData: (data: any) => void
+
+  // 是否是基础类型
+  isBasicEle: (obj: any) => Boolean
+
+  // 转义xml中不合法的字符
+  encodeStr: (xmlString: String) => String
+
+  // 序列化数据元素项
+  serilizeElement: (prop: String, value: any) => String
+
+  // 计算缩进
+  calcPrefix: (preIndent: number) => number
+
+  // 格式化xml
+  formatXml: (xmlString: String) => String
+
+  //序列化XML字符串
+  serilize: () => String
+
+}
+
 interface XlsxComponent extends BaseComponent {
 
   /**
@@ -12,28 +37,14 @@ interface XlsxComponent extends BaseComponent {
 
 }
 
-interface JsonComponent extends BaseComponent {
+interface JsonComponent extends BaseComponent {}
 
-}
-
-interface TextComponent extends BaseComponent {
-
-}
+interface TextComponent extends BaseComponent {}
 
 interface SqlComponent extends BaseComponent { }
 
 interface CsvComponent extends BaseComponent { }
 
 interface XmlComponent extends BaseComponent {
-
-  /**
-   * 计算缩进
-   */
-  calcPrefix: (idx: number) => number
-
-  /**
-   * 格式化XML
-   */
-  formatXml: (xml: string) => string
-
+  serilizer: Json2XMLSerilizer;
 }

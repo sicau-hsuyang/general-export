@@ -1,18 +1,17 @@
 const utils = require("./utils")
 
 class BaseComponent {
-
   /**
    * @type {ExportConfig}
    */
   config;
 
   get utils() {
-    return utils
+    return utils;
   }
 
   constructor(runtimeConfig) {
-    this.config = runtimeConfig
+    this.config = runtimeConfig;
   }
 
   /**
@@ -23,26 +22,27 @@ class BaseComponent {
     // 对于空数组 默认认为可以导出全部
     let props = null;
     if (!this.config.columns) {
-      props = []
+      props = [];
     }
     //如果是对象
     else if (utils.isObject(this.config.columns)) {
       props = Object.entries(this.config.columns).map(([prop, value]) => {
-        this.config.columns[prop].prop = prop
+        this.config.columns[prop].prop = prop;
         return {
-          ...value, prop
-        }
-      })
+          ...value,
+          prop
+        };
+      });
     }
     //如果是Array<string>数组
     else if (Array.isArray(this.config.columns)) {
       //将其构造成 hash形式
-      let mapping = {}
+      let mapping = {};
       this.config.columns.forEach(column => {
-        mapping[column.prop] = column
-      })
-      this.config.columns = mapping
-      props = Object.values(this.config.columns)
+        mapping[column.prop] = column;
+      });
+      this.config.columns = mapping;
+      props = Object.values(this.config.columns);
     }
 
     return props;
@@ -54,13 +54,9 @@ class BaseComponent {
    */
   isObjCol(obj) {
     return (
-      Object.keys(obj).length === 3 &&
-      obj.colSpan &&
-      obj.rowSpan &&
-      obj.value
+      Object.keys(obj).length === 3 && obj.colSpan && obj.rowSpan && obj.value
     );
   }
-
 
   /**
    * 判断数据是否是对象类型
@@ -84,7 +80,7 @@ class BaseComponent {
 
   // 放缩 对象的属性
   mappingRows(record) {
-    const outColumns = this.getAvailableProps()
+    const outColumns = this.getAvailableProps();
     // 如果exportProps是空数组，则认为导出全部数据
     if (outColumns.length === 0) {
       // 如果是带有colSpan 和 rowSpan的数据 需要进行缩小 仅仅只需要取value字段
@@ -93,12 +89,13 @@ class BaseComponent {
       // 否则需要映射数据
       const newObj = {};
       Object.entries(record).forEach(([prop, propData]) => {
-        let defineNode = this.config.columns[prop]
+        let defineNode = this.config.columns[prop];
         if (defineNode) {
-          let col = this.isObjCol(propData) ? propData.value : propData
-          let row = this.isObjRow(record) ? this.shrinkRow(record) : record
-          let formatter = defineNode.formatter
-          newObj[prop] = typeof formatter === 'function' ? formatter(col, row) : col;
+          let col = this.isObjCol(propData) ? propData.value : propData;
+          let row = this.isObjRow(record) ? this.shrinkRow(record) : record;
+          let formatter = defineNode.formatter;
+          newObj[prop] =
+            typeof formatter === 'function' ? formatter(col, row) : col;
         }
         // 如果是带有 colSpan 和 rowSpan的数据 则需要 取value字段
       });
@@ -108,10 +105,9 @@ class BaseComponent {
 
   makeSureArray(data) {
     if (!Array.isArray(data)) {
-      throw `[the data must be an array]`
+      throw `[the data must be an array]`;
     }
   }
-
 
   /**
    * 标准化数据列表
@@ -120,9 +116,9 @@ class BaseComponent {
   reshapeData(list) {
     return list.map(record => {
       if (!utils.isObject(record)) {
-        throw `[the row-data must be an object type,please check your datasource]`
+        throw `[the row-data must be an object type,please check your datasource]`;
       }
-      return this.mappingRows(record)
+      return this.mappingRows(record);
     });
   }
 
@@ -133,13 +129,12 @@ class BaseComponent {
    * @returns {String|Blob|Buffer}
    */
   doExport(dataSource) {
-    throw `[the do-work method must be implemented]`
+    throw `[the do-work method must be implemented]`;
   }
 
   stringifyDate(value) {
     return value.getTime();
   }
-
 
   /**
    * 自定义的序列化规则
@@ -147,20 +142,19 @@ class BaseComponent {
    */
   stringify(value) {
     if (typeof value === 'undefined') {
-      return 'undefined'
+      return 'undefined';
     } else if (utils.isNull(value)) {
-      return 'null'
+      return 'null';
     } else if (utils.isObject(value) || utils.isString(value)) {
-      return JSON.stringify(value)
+      return JSON.stringify(value);
     } else if (utils.isRegExp(value)) {
-      return value.toString()
+      return value.toString();
     } else if (utils.isDate(value)) {
-      return this.stringifyDate(value)
+      return this.stringifyDate(value);
     } else {
-      return value
+      return value;
     }
   }
-
 }
 
 module.exports = BaseComponent

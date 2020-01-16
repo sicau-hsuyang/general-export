@@ -10,13 +10,6 @@ class JsonToXmlSerilizer {
   }
 
   /**
-   * 是否是树的叶节点
-   */
-  isLeaf(obj) {
-    return (obj &&Object.values(obj).every(x => !Array.isArray(x) && !utils.isObject(x)));
-  }
-
-  /**
    * 是否是除对象和Array以外的类型
    * @param {*} obj
    * @returns {boolean}
