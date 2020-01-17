@@ -14,6 +14,7 @@ class JsonComponent extends BaseComponent {
     let dataSource = this.config.data
     this.makeSureArray(dataSource)
     const data = this.reshapeData(dataSource)
+     console.log(data)
     return JSON.stringify(data, null, 2)
   }
 

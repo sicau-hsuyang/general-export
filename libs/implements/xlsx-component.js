@@ -1,4 +1,8 @@
-const ExcelJS = require('exceljs')
+// const ExcelJS = require('exceljs')
+let ExcelJS = null
+import('exceljs').then(ins => {
+  ExcelJS = ins.default || ins;
+});
 const BaseComponent = require('../component')
 class XlsxComponent extends BaseComponent {
 
@@ -125,7 +129,7 @@ class XlsxComponent extends BaseComponent {
       console.error(exp)
       console.error('[ the error has occurred when exporting or the browser can not support export]')
     }
-    return typeof Blob !== undefined ? buffer : new Blob([buffer]);
+    return typeof Blob === 'undefined' ? buffer : new Blob([buffer]);
   }
 
 }

@@ -60,7 +60,10 @@ class JsonToXmlSerilizer {
       } else if (utils.isRegExp(objValue)) {
         // 处理 正则
         innerSchema = objValue.source + '|' + objValue.flags;
-      } else if (Number.isNaN(objValue) || Number.isFinite(objValue)) {
+      } else if (
+        typeof objValue === 'number' &&
+        (Number.isNaN(objValue) || !Number.isFinite(objValue))
+      ) {
         innerSchema = 'null';
       } else {
         // 转义特殊字符
@@ -105,13 +108,9 @@ class JsonToXmlSerilizer {
   formatXml(xmlStr) {
     var text = xmlStr;
     // 使用replace去空格
-    text =
-      '\n' +
-      text
-        .replace(/(<\w+)(\s.*?>)/g, function($0, name, props) {
+    text ='\n' +text.replace(/(<\w+)(\s.*?>)/g, function($0, name, props) {
           return name + ' ' + props.replace(/\s+(\w+=)/g, ' $1');
-        })
-        .replace(/>\s*?</g, '>\n<');
+        }).replace(/>\s*?</g, '>\n<');
     // 处理注释
     text = text
       .replace(/\n/g, '\r')
@@ -179,6 +178,7 @@ class JsonToXmlSerilizer {
   }
 
   serilize() {
+
     const startSchema = '<?xml version="1.0" encoding="UTF-8" ?>';
     let bodySchema = '';
     // xml只能有一个根节点 因此需要手动添加 root 节点 使之成为根节点

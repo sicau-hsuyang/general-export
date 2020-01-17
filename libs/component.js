@@ -54,7 +54,11 @@ class BaseComponent {
    */
   isObjCol(obj) {
     return (
-      Object.keys(obj).length === 3 && obj.colSpan && obj.rowSpan && obj.value
+      Object.isObject(obj) &&
+      Object.keys(obj).length === 3 &&
+      obj.colSpan !== undefined &&
+      obj.rowSpan !== undefined &&
+      obj.value !== undefined
     );
   }
 
@@ -63,7 +67,7 @@ class BaseComponent {
    * @param {Object} record 数据记录
    */
   isObjRow(record) {
-    return Object.values(record).every(x => this.isObjCol(x));
+    return record && Object.values(record).every(x => this.isObjCol(x));
   }
 
   /**

@@ -11,90 +11,123 @@
 
 <script>
 import exportHelper from "../../../index.js";
-console.log(exportHelper);
+
+const data = [
+    {
+        id: 1,
+        name: "螺髻山",
+        url:
+            "https://baike.baidu.com/item/%E8%9E%BA%E9%AB%BB%E5%B1%B1%E9%A3%8E%E6%99%AF%E5%8C%BA/1226258?fr=aladdin",
+        location: "凉山彝族自治州普格县",
+        ticket: true,
+        price: 100,
+        createTime: Date.now()
+    },
+    {
+        id: 2,
+        name: "邛海",
+        url:
+            "https://baike.baidu.com/item/%E9%82%9B%E6%B5%B7/1247191?fr=aladdin",
+        location: "凉山彝族自治州西昌市",
+        price: 25,
+        ticket: true,
+        createTime: Date.now()
+    },
+    {
+        id: 3,
+        name: "兴隆湖",
+        url:
+            "https://baike.baidu.com/item/%E5%85%B4%E9%9A%86%E6%B9%96",
+        location: "成都市天府新区兴隆镇",
+        ticket: false,
+        price: null,
+        createTime: Date.now()
+    }]
+
 export default {
     name: "app",
     methods: {
         fetchData() {
-            return [
-                {
-                    id: 1,
-                    name: "螺髻山",
-                    location: "四川省凉山彝族自治州普格县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 100
-                },
-                {
-                    id: 2,
-                    name: "邛海",
-                    location: "四川省凉山彝族自治州西昌市",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 25
-                },
-                {
-                    id: 3,
-                    name: "大风顶",
-                    location: "四川省凉山彝族自治州雷波县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 200
-                },
-                {
-                    id: 4,
-                    name: "泸山",
-                    location: "四川省凉山彝族自治州西昌市",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 100
-                },
-                {
-                    id: 5,
-                    name: "西昌古城",
-                    location: "四川省凉山彝族自治州西昌市",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: false,
-                    price: 0
-                },
-                {
-                    id: 6,
-                    name: "马湖",
-                    location: "四川省凉山彝族自治州雷波县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: false,
-                    price: 0
-                },
-                {
-                    id: 7,
-                    name: "会理古城",
-                    location: "四川省凉山彝族自治州会理县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: false,
-                    price: 0
-                }
-            ];
+            // return [
+            //     {
+            //         id: 1,
+            //         name: "螺髻山",
+            //         location: "四川省凉山彝族自治州普格县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 100
+            //     },
+            //     {
+            //         id: 2,
+            //         name: "邛海",
+            //         location: "四川省凉山彝族自治州西昌市",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 25
+            //     },
+            //     {
+            //         id: 3,
+            //         name: "大风顶",
+            //         location: "四川省凉山彝族自治州雷波县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 200
+            //     },
+            //     {
+            //         id: 4,
+            //         name: "泸山",
+            //         location: "四川省凉山彝族自治州西昌市",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 100
+            //     },
+            //     {
+            //         id: 5,
+            //         name: "西昌古城",
+            //         location: "四川省凉山彝族自治州西昌市",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: false,
+            //         price: 0
+            //     },
+            //     {
+            //         id: 6,
+            //         name: "马湖",
+            //         location: "四川省凉山彝族自治州雷波县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: false,
+            //         price: 0
+            //     },
+            //     {
+            //         id: 7,
+            //         name: "会理古城",
+            //         location: "四川省凉山彝族自治州会理县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: false,
+            //         price: 0
+            //     }
+            // ];
+            return data
         },
         fetchData1() {
             let data = [
@@ -314,14 +347,13 @@ export default {
                     }
                 }
             });
-            console.log(output);
             return output;
         },
         handleJson() {
-            exportHelper("数据源.json", this.fetchData, {});
+            exportHelper("数据源.json", this.fetchData1, {});
         },
         handleText() {
-            exportHelper("数据源.txt", this.fetchData, {
+            exportHelper("数据源.txt", this.fetchData1, {
                 columns: {
                     id: {
                         label: "序号"
@@ -342,7 +374,7 @@ export default {
             });
         },
         handleXml() {
-            exportHelper("数据源.xml", this.fetchData, {
+            exportHelper("数据源.xml", this.fetchData1, {
                 columns: [
                     { prop: "id", label: "序号" },
                     { prop: "name", label: "景点名称" },
@@ -362,7 +394,7 @@ export default {
             });
         },
         handleSql() {
-            exportHelper("数据源.sql", this.fetchData, {
+            exportHelper("数据源.sql", this.fetchData1, {
                 columns: [
                     { prop: "id", label: "序号" },
 

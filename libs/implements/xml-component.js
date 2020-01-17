@@ -10,6 +10,7 @@ class XmlComponent extends BaseComponent {
 
   constructor(config) {
     super(config);
+
     this.serilier = new XmlSerializer();
   }
 

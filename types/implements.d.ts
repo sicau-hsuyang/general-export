@@ -18,7 +18,9 @@ interface Json2XMLSerilizer {
   // 格式化xml
   formatXml: (xmlString: String) => String
 
-  //序列化XML字符串
+  /**
+   * 序列化XML字符串
+   */
   serilize: () => String
 
 }

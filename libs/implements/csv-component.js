@@ -1,4 +1,8 @@
-const ExcelJS = require('exceljs');
+// const ExcelJS = require('exceljs');
+let ExcelJS = null;
+import('exceljs').then(ins => {
+  ExcelJS = ins.default || ins;
+});
 const BaseComponent = require("../component");
 class CsvComponent extends BaseComponent {
 
