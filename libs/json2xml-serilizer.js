@@ -1,7 +1,8 @@
 require('./extension/decycle.js');
 const utils = require('./utils.js');
 class JsonToXmlSerilizer {
-  constructor(json) {
+  constructor(json, config) {
+    this.config = config;
     this.setData(json)
   }
 
@@ -178,8 +179,8 @@ class JsonToXmlSerilizer {
   }
 
   serilize() {
-
-    const startSchema = '<?xml version="1.0" encoding="UTF-8" ?>';
+    let encode = this.config.encode
+    const startSchema = `<?xml version="1.0" encoding="${ encode ? encode.toUpperCase() : 'UTF-8'}" ?>`;
     let bodySchema = '';
     // xml只能有一个根节点 因此需要手动添加 root 节点 使之成为根节点
     bodySchema += '<root>';

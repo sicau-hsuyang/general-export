@@ -11,7 +11,9 @@ class XmlComponent extends BaseComponent {
   constructor(config) {
     super(config);
 
-    this.serilier = new XmlSerializer();
+    this.serilier = new XmlSerializer(null, {
+      encode: this.config.encode
+    });
   }
 
   // exportXml(dataSource) {
@@ -63,8 +65,7 @@ class XmlComponent extends BaseComponent {
   doExport() {
     let dataSource = this.config.data;
     this.makeSureArray(dataSource);
-    const data = this.reshapeData(dataSource);
-    this.serilier.setData(data);
+    this.serilier.setData(this.reshapeData(dataSource));
     return this.serilier.serilize();
   }
 }

@@ -7,7 +7,7 @@ const CsvComponent = require("./implements/csv-component");
 const utils = require("./utils");
 const path = require("path")
 const fs = require("fs")
-class BSRunner {
+module.exports = class BSRunner {
 
   /**
    * @type { BaseComponent }
@@ -43,6 +43,9 @@ class BSRunner {
       // 对象数组 { prop: 'age', label: '年纪', ...otherProps }
       // 默认 undefined
       columns: undefined,
+      // 针对JSON的配置节
+      replacer: null,
+      indent: 2,
       // 文件编码
       // 默认utf-8
       encode: 'utf-8'
@@ -164,7 +167,7 @@ class BSRunner {
     this.workerStrategyFactory(ext);
     let content = await this.worker.doExport();
     typeof Buffer !== undefined && Buffer.isBuffer(content)
-      ? this.saveFile(content)
+      ? this.saveFile(content, this.config.path)
       : utils.isBlob(content)
       ? this.saveBlob2File(content)
       : this.saveTxt2File(content);
@@ -172,5 +175,3 @@ class BSRunner {
   }
 
 }
-
-module.exports = BSRunner
