@@ -14,13 +14,17 @@ class BSRunner {
    */
   worker
 
-  config
+  /**
+   * @type { ExportConfig }
+   */
+  config = this.getDefault()
 
   constructor(filename, dataSource, options) {
-    this.config = {}
-    let ext = this.getExtByFilename(filename);
-    this.workerStrategyFactory(ext);
-    this.gen(filename, dataSource, options)
+    // 设置配置项目中的数据
+    Object.assign(this.config, this.getDefault(), options, {
+      filename,
+      data: dataSource
+    });
   }
 
 
@@ -45,17 +49,20 @@ class BSRunner {
     }
   }
 
-  gen(filename, dataSource, options) {
+  gen() {
+    let dataSource = this.config.data;
     // 把新的配置覆盖到顶层变量上去，可以随意使用这些配置
-    Object.assign(this.config, this.getDefault(), options, { filename })
-    const exportData = typeof dataSource === 'function' ? dataSource() : dataSource
-    if (utils.isPromise(exportData)) {
-      exportData.then(data => {
-        this.generateFile(data)
-      })
-    } else {
-      this.generateFile(exportData)
-    }
+    return new Promise((resolve, reject) => {
+      const exportData =
+        typeof dataSource === 'function' ? dataSource() : dataSource;
+      if (utils.isPromise(exportData)) {
+        exportData.then(data => {
+          this.generateFile(data).then(resolve).catch(reject);
+        });
+      } else {
+        this.generateFile(exportData).then(resolve).catch(reject)
+      }
+    });
   }
 
   /**
@@ -150,13 +157,18 @@ class BSRunner {
 
   /**
    * 生成导出文件
-   * @param {Array<Object>} dataSource 导出数据源
    */
   async generateFile(dataSource) {
-    // 设置配置项目中的数据
-    Object.assign(this.config, { data: dataSource })
+    this.config.data = dataSource;
+    let ext = this.getExtByFilename(this.config.filename);
+    this.workerStrategyFactory(ext);
     let content = await this.worker.doExport();
-    typeof Buffer !== undefined && Buffer.isBuffer(content) ? this.saveFile(content) : utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)
+    typeof Buffer !== undefined && Buffer.isBuffer(content)
+      ? this.saveFile(content)
+      : utils.isBlob(content)
+      ? this.saveBlob2File(content)
+      : this.saveTxt2File(content);
+    return true;
   }
 
 }

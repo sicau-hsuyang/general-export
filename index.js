@@ -3,5 +3,6 @@ module.exports = function (filename, dataSource, options = {}) {
   Object.isObject = function (obj) {
     return Object.prototype.toString.call(obj) === '[object Object]'
   }
-  return new BSRunner(filename, dataSource, options)
+  var runner = new BSRunner(filename, dataSource, options)
+  return runner.gen()
 }

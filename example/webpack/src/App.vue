@@ -350,7 +350,11 @@ export default {
             return output;
         },
         handleJson() {
-            exportHelper("数据源.json", this.fetchData1, {});
+            exportHelper("数据源.json", this.fetchData1, {}).then(success => {
+               console.log(success)
+            }).catch(err => {
+                console.log(err)
+            });
         },
         handleText() {
             exportHelper("数据源.txt", this.fetchData1, {
