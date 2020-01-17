@@ -100,41 +100,7 @@ class XlsxComponent extends BaseComponent {
   }
 
   demo() {
-    if (
-      propValue.colSpan > 1 &&
-      propValue.rowSpan > 1 &&
-      this.config.autoMergeAdjacentCol &&
-      this.config.autoMergeAdjacentRow
-    ) {
-      // 如果当前列已经被过滤了 或者说 顺序已经变了 怎么办
-      // 合并行列
-      // 同时合并行 和 列
-      const endRowNum = rowNum + propValue.rowSpan - 1;
-      const endColNum = this.getColCellNum(
-        columnSequnceMapping[prop] + 1 + propValue.colSpan - 1
-      );
-      const endCellAddr = endColNum + '' + endRowNum;
-      sheet.mergeCells(cellAddr + ':' + endCellAddr);
-      let cell = sheet.getCell(cellAddr);
-      cell && (cell.alignment = { vertical: 'middle', horizontal: 'center' });
-    } else if (rowSpan > 1 && this.config.autoMergeAdjacentRow) {
-      // 合并行
-      // 合并行的时候因为算了自己 所以要减1
-      const endRowNum = rowNum + rowSpan - 1;
-      const endRowAddr = colNum + '' + endRowNum;
-      sheet.mergeCells(cellAddr + ':' + endRowAddr);
-      let cell = sheet.getCell(cellAddr);
-      cell && (cell.alignment = { vertical: 'middle' });
-    }
-    // 如果需要合并列
-    else if (colSpan > 1 && this.config.autoMergeAdjacentCol) {
-      // 合并列的时候因为算了自己 所以要减1 并且 先用Num进行加减再进行转化
-      const endColNum = this.getColCellNum(colInitIdx + 1 + colSpan - 1);
-      const endColAddr = endColNum + '' + rowNum;
-      sheet.mergeCells(cellAddr + ':' + endColAddr);
-      let cell = sheet.getCell(cellAddr);
-      cell && (cell.alignment = { horizontal: 'center' });
-    }
+
   }
 
   async doExport() {
@@ -182,32 +148,88 @@ class XlsxComponent extends BaseComponent {
         for (let rowIdx = 0; rowIdx < fatData.length; rowIdx++) {
           const row = Object.entries(fatData[rowIdx]).orderBy(x => columnSequnceMapping[x[0]]);
           let colInitIdx = 0;
+          let mergeColsMap = {};
           for (let colIdx = 0; colIdx < row.length; colIdx++) {
-            // 对于1行1列是不需要考虑合并的
-            if (colIdx === 0 || rowIdx === 0) {
+            // 对于1列是不需要考虑合并的
+            if (colIdx === 0) {
               continue;
             }
-
-            //判断当前行 当前列上的数据跟上一行的当前列的数据是否相同
-            // 如果不相同 则换行
-            if (row[colIdx][1].value === fatData[rowIdx - 1][columnSequnceMapping[colIdx]].value) {
-              fatData[rowInitIdx][columnSequnceMapping[colIdx]].rowSpan++;
-              row[colIdx][1].rowSpan = 0;
-            } else {
-              rowInitIdx = rowIdx
-            }
-
             // 如果现在的和之前的相等，将之前的那个位移+1，当前的置为0
             // 且先不着急合并，等一会儿再来合并
             if (row[colIdx][1].value === row[colIdx - 1][1].value) {
               row[colInitIdx][1].colSpan++;
               row[colIdx][1].colSpan = 0;
             } else {
+              // 记住占多少列
+              row[colInitIdx][1].colSpan > 1 && (mergeColsMap[columnSequnceMapping[colInitIdx]] =
+                row[colInitIdx][1].colSpan);
               colInitIdx = colIdx;
             }
           }
+          // 记住需要合并的列
+          fatData[rowIdx].mergeColsMap = mergeColsMap;
+          if (rowIdx > 0) {
+            let lastColsMap = fatData[rowIdx - 1].mergeColsMap;
+            let values = Object.entries(lastColsMap);
+            let perfectEqual = !!values.length && values.every(([prop, colSpan]) => {
+              return mergeColsMap[prop] === colSpan;
+            });
+            //如果不是完美想等，则就不需要合并行了
+            !perfectEqual && (rowInitIdx = rowIdx);
+          }
         }
-        console.log(fatData)
+
+        fatData.forEach((row, rowIdx) => {
+          Object.entries(row).forEach(([colProp, colValue]) => {
+            // 1-> A 因为拿到的是序号所以需要+1
+            const colNum = this.getColCellNum(columnSequnceMapping[colProp] + 1);
+            // 因为第一行用的是表头 所以行号直接是从第二行开始算
+            const rowNum = rowIdx + 2;
+            const cellAddr = colNum + '' + rowNum;
+            if (
+              colValue.colSpan > 1 &&
+              colValue.rowSpan > 1 &&
+              this.config.autoMergeAdjacentCol &&
+              this.config.autoMergeAdjacentRow
+            ) {
+              // 合并行列
+              // 同时合并行 和 列
+              const endRowNum = rowNum + colValue.rowSpan - 1;
+              const endColNum = this.getColCellNum(
+                columnSequnceMapping[colProp] + 1 + colValue.colSpan - 1
+              );
+              const endCellAddr = endColNum + '' + endRowNum;
+              sheet.mergeCells(cellAddr + ':' + endCellAddr);
+              let cell = sheet.getCell(cellAddr);
+              cell &&
+                (cell.alignment = { vertical: 'middle', horizontal: 'center' });
+            } else if (
+              colValue.rowSpan > 1 &&
+              this.config.autoMergeAdjacentRow
+            ) {
+              // 合并行
+              // 合并行的时候因为算了自己 所以要减1
+              const endRowNum = rowNum + colValue.rowSpan - 1;
+              const endRowAddr = colNum + '' + endRowNum;
+              sheet.mergeCells(cellAddr + ':' + endRowAddr);
+              let cell = sheet.getCell(cellAddr);
+              cell && (cell.alignment = { vertical: 'middle' });
+            } else if (
+              colValue.colSpan > 1 &&
+              this.config.autoMergeAdjacentCol
+            ) {
+              // 如果需要合并列
+              // 合并列的时候因为算了自己 所以要减1 并且 先用Num进行加减再进行转化
+              const endColNum = this.getColCellNum(
+                columnSequnceMapping[colProp] + 1 + colValue.colSpan - 1
+              );
+              const endColAddr = endColNum + '' + rowNum;
+              sheet.mergeCells(cellAddr + ':' + endColAddr);
+              let cell = sheet.getCell(cellAddr);
+              cell && (cell.alignment = { horizontal: 'center' });
+            }
+          });
+        });
       }
       buffer = await excel.xlsx.writeBuffer();
     } catch (exp) {
