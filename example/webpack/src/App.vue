@@ -298,6 +298,20 @@ export default {
                     },
                     isTicket: true,
                     price: 180
+                },
+                {
+                    id: 13,
+                    name: "八达岭长城",
+                    province: "北京市",
+                    city: "北京市",
+                    country: "延庆区",
+                    location: "北京市延庆区",
+                    position: {
+                        lat: null,
+                        lng: null
+                    },
+                    isTicket: true,
+                    price: 380
                 }
             ];
             // let locationPos = 0;
@@ -442,9 +456,9 @@ export default {
             exportHelper("数据源.xlsx", this.fetchData1, {
                 columns: [
                     { prop: "id", label: "序号", order: 6 },
-                    // { prop: "name", label: "景点名称" },
-                    // { prop: "province", label: "省/市/自治区" },
-                    { prop: "city", label: "市/州", order: 1 },
+                    { prop: "name", label: "景点名称" },
+                    { prop: "province", label: "省/市/自治区", order: 1, },
+                    { prop: "city", label: "市/州", order: 2 },
                     { prop: "country", label: "区县" },
                     {
                         prop: "location",

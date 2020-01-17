@@ -48,9 +48,11 @@ interface ExportConfig {
   // 默认 process.cwd() +"/export"
   path: string;
 
+  // 仅仅对Excel生效
   // 可选 自动合并相邻行相等的值
   autoMergeAdjacentRow: boolean;
 
+  // 仅仅对Excel生效
   // **高难度动作 可选 自动合并相邻列相等的值
   autoMergeAdjacentCol: boolean;
 }

@@ -46,9 +46,10 @@ module.exports = class BSRunner {
       // 针对JSON的配置节
       replacer: null,
       indent: 2,
-      // 文件编码
-      // 默认utf-8
-      encode: 'utf-8'
+      encode: 'utf-8',
+      // 针对Excel的配置
+      autoMergeAdjacentCol: false,
+      autoMergeAdjacentRow: false
     }
   }
 
