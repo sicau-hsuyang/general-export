@@ -130,7 +130,7 @@ export default {
             return data
         },
         fetchData1() {
-            let data = [
+            /*let data = [
                 {
                     id: 1,
                     name: "螺髻山",
@@ -313,7 +313,7 @@ export default {
                     isTicket: true,
                     price: 380
                 }
-            ];
+            ];*/
             // let locationPos = 0;
             // let proPos = 0;
             // let output = data.map(x => {
@@ -362,6 +362,15 @@ export default {
             //     }
             // });
             // return output;
+            let data = [
+                {a: 1,	b:2,	c:2,	d:3,	e:3,	f:3,    g:3, 	h:3,	i:4},
+                {a:2,	b:2,	c:2,	d:3,	e:3,	f:2,	g:2,	h:2,	i:2},
+                {a:2,	b:2,	c:1,	d:3,	e:2,	f:3,	g:1,	h:1,	i:2},
+                {a:3,	b:4,	c:2,	d:2,	e:2,	f:4,	g:4,	h:2,	i:2},
+                {a:3,	b:3,	c:3,	d:4,	e:4,	f:3,	g:4,	h:5,	i:5},
+                {a:3,	b:3,	c:3,	d:1,	e:2,	f:4,	g:5,	h:1,	i:3},
+                {a:3,	b:3,	c:3,	d:2,	e:1,	f:4,	g:4,	h:2,	i:2},
+            ]
             return data;
         },
         handleJson() {
@@ -454,24 +463,24 @@ export default {
         },
         handleXlsx() {
             exportHelper("数据源.xlsx", this.fetchData1, {
-                columns: [
-                    { prop: "id", label: "序号", order: 6 },
-                    { prop: "name", label: "景点名称" },
-                    { prop: "province", label: "省/市/自治区", order: 1, },
-                    { prop: "city", label: "市/州", order: 2 },
-                    { prop: "country", label: "区县" },
-                    {
-                        prop: "location",
-                        label: "地址"
-                    },
-                    {
-                        prop: "price",
-                        label: "门票价格",
-                        formatter(price) {
-                            return price == 0 ? "无需门票" : price;
-                        }
-                    }
-                ],
+                // columns: [
+                //     { prop: "id", label: "序号" },
+                //     { prop: "name", label: "景点名称" },
+                //     { prop: "province", label: "省/市/自治区" },
+                //     { prop: "city", label: "市/州" },
+                //     { prop: "country", label: "区县" },
+                //     {
+                //         prop: "location",
+                //         label: "地址"
+                //     },
+                //     {
+                //         prop: "price",
+                //         label: "门票价格",
+                //         formatter(price) {
+                //             return price == 0 ? "无需门票" : price;
+                //         }
+                //     }
+                // ],
                 autoMergeAdjacentRow: true,
                 autoMergeAdjacentCol: true
             });

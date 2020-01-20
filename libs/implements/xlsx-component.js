@@ -12,6 +12,7 @@ class XlsxComponent extends BaseComponent {
         'this module require module which named exceljs, please run bash `npm install exceljs -S`'
       );
     }
+    this.matrixHelper = []
   }
 
   /**
@@ -99,8 +100,36 @@ class XlsxComponent extends BaseComponent {
     return list.map(x => this.magnifyRecord(x));
   }
 
-  demo() {
+  createMatrix(data) {
+    let rows = data.length;
+    let cols = Object.keys(data[0]).length;
+    for (let i = 0; i < rows; i++) {
+      let colArr = [];
+      for (let j = 0; j < cols; j++) {
+        colArr.push(0);
+      }
+      this.matrixHelper.push(colArr);
+    }
+  }
 
+  hasMerge({ row, col } = { row: 0, col: 0 }) {
+    return this.matrixHelper[row] && this.matrixHelper[row][col] && this.matrixHelper[row][col] === 1;
+  }
+
+  /**
+   * 判断是否矩阵相等
+   * @param {*} { from, to }
+   * @param {*} value
+   */
+  matrixEqual(data,from, to, value) {
+    for (let i = from.row; i < to.row - from.row; i++) {
+      for (let j = from.col; j < to.col - from.col; j++) {
+        if (data[i][j] !== value) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
   async doExport() {
@@ -138,48 +167,97 @@ class XlsxComponent extends BaseComponent {
       sheet.addRows(data);
       // 此时必须还是要拿dataSource取判断
       // 如果是对象行进行cell的合并
-      if (
-        this.config.autoMergeAdjacentCol ||
-        this.config.autoMergeAdjacentRow
-      ) {
-        //被放大的胖数据
-        let fatData = this.magnifyRows(data);
-        let rowInitIdx = 0;
-        for (let rowIdx = 0; rowIdx < fatData.length; rowIdx++) {
-          const row = Object.entries(fatData[rowIdx]).orderBy(x => columnSequnceMapping[x[0]]);
-          let colInitIdx = 0;
-          let mergeColsMap = {};
+      if (this.config.autoMergeAdjacentCol ||this.config.autoMergeAdjacentRow) {
+        this.createMatrix(data);
+        for (let rowIdx = 0; rowIdx < data.length; rowIdx++) {
+          const row = Object.entries(data[rowIdx]).orderBy(x => columnSequnceMapping[x[0]]).map(x => x[1]);
           for (let colIdx = 0; colIdx < row.length; colIdx++) {
-            // 对于1列是不需要考虑合并的
-            if (colIdx === 0) {
-              continue;
-            }
-            // 如果现在的和之前的相等，将之前的那个位移+1，当前的置为0
-            // 且先不着急合并，等一会儿再来合并
-            if (row[colIdx][1].value === row[colIdx - 1][1].value) {
-              row[colInitIdx][1].colSpan++;
-              row[colIdx][1].colSpan = 0;
-            } else {
-              // 记住占多少列
-              row[colInitIdx][1].colSpan > 1 && (mergeColsMap[columnSequnceMapping[colInitIdx]] =
-                row[colInitIdx][1].colSpan);
-              colInitIdx = colIdx;
+            //如果当前单元格还是没有被合并的单元格
+            if (!this.hasMerge({ col: colIdx, row: rowIdx })) {
+              let colSpan = 0;
+              let rowSpan = 0;
+              let dx = 0, dy = 0;
+              //是否停止X、Y轴的增量
+              let stopDx = false, stopDy = false;
+              // 从当前列 最多合并到结束行和结束列
+              while (!stopDx && !stopDy) {
+                if (row[colIdx + dx] === row[colIdx + dx + 1] &&
+                  data[rowIdx + dx + 1][columnSequnceMapping[colIdx + dx]] === row[colIdx + dx]) {
+                  //如果这个子矩阵都相同的话，就真正的合并
+                  if (this.matrixEqual(data,
+                      { row: rowIdx, col: colIdx },
+                      { row: rowIdx + dy + 1, col: colIdx + dx + 1 },
+                      row[colIdx])) {
+                    dx++;
+                    dy++;
+                  }
+                  //否则 就尽可能的合并就算了
+                  else {
+
+                  }
+                }
+                //合并行
+                else if (dx <=0 && data[rowIdx + dx + 1][columnSequnceMapping[colIdx+dx]] === row[colIdx+dx]) {
+                  dy++;
+                  this.matrixHelper[rowIdx + dy][rowIdx + dx] = 1;
+                }
+                // 合并列
+                else if (dy<= 0 && row[colIdx+dx] === row[colIdx + dx + 1]) {
+                  dx++;
+                  // 被使用了
+                  this.matrixHelper[rowIdx + dy][rowIdx + dx] = 1;
+                } else {
+                  stopDx = true;
+                  stopDy = true;
+                }
+
+                !stopDx && dx++;
+                dx >= row.length - colIdx && (stopDx = true)
+                !stopDy && dy++;
+                dy >= data.length - rowIdx && (stopDy=true)
+              }
+              rowSpan = dy;
+              colSpan = dx;
+              if (rowSpan > 0 || colSpan > 0) {
+                console.log(rowSpan, colSpan);
+              }
             }
           }
-          // 记住需要合并的列
-          fatData[rowIdx].mergeColsMap = mergeColsMap;
-          if (rowIdx > 0) {
-            let lastColsMap = fatData[rowIdx - 1].mergeColsMap;
-            let values = Object.entries(lastColsMap);
-            let perfectEqual = !!values.length && values.every(([prop, colSpan]) => {
-              return mergeColsMap[prop] === colSpan;
-            });
-            //如果不是完美想等，则就不需要合并行了
-            !perfectEqual && (rowInitIdx = rowIdx);
-          }
+          //如果记录了上一行的关系的话，此刻合并的时候需要参考上一行的信息
+          // 对于不跟当前行相同的 就直接合并 否则 就留着 不慌合并
+          /*if (Object.isObject(lastColsMap)) {
+            Object.entries(lastColsMap).filter(x => x[1].colSpan >0).forEach(([prop, { colSpan, value  }]) => {
+              console.log(prop, colSpan, mergeColsMap[prop])
+              let cellAddr = null;
+              let rowNum = rowIdx;
+              //当前行跟上一行合并
+              if (colSpan === mergeColsMap[prop].colSpan && value === mergeColsMap[prop].value) {
+                // 暂不合并
+              }
+              // 否则 仅仅上一行合并
+              else {
+                //如果需要合并N行N列
+                if (this.config.autoMergeAdjacentCol && this.config.autoMergeAdjacentRow) {
+                  const endColNum = this.getColCellNum(columnSequnceMapping[prop] + 1 + colSpan - 1);
+                  const endColAddr = endColNum + '' + rowNum;
+                  sheet.mergeCells(cellAddr + ':' + endColAddr);
+                  let cell = sheet.getCell(cellAddr);
+                  cell && (cell.alignment = { horizontal: 'center' });
+                }
+                // 合并N行
+                else if (this.config.autoMergeAdjacentRow) {
+
+                } else if (this.config.autoMergeAdjacentCol) {
+
+                }
+              }
+            })
+          }*/
+          //记住上一行的map
+          lastColsMap = mergeColsMap
         }
 
-        fatData.forEach((row, rowIdx) => {
+        /*data.forEach((row, rowIdx) => {
           Object.entries(row).forEach(([colProp, colValue]) => {
             // 1-> A 因为拿到的是序号所以需要+1
             const colNum = this.getColCellNum(columnSequnceMapping[colProp] + 1);
@@ -220,16 +298,10 @@ class XlsxComponent extends BaseComponent {
             ) {
               // 如果需要合并列
               // 合并列的时候因为算了自己 所以要减1 并且 先用Num进行加减再进行转化
-              const endColNum = this.getColCellNum(
-                columnSequnceMapping[colProp] + 1 + colValue.colSpan - 1
-              );
-              const endColAddr = endColNum + '' + rowNum;
-              sheet.mergeCells(cellAddr + ':' + endColAddr);
-              let cell = sheet.getCell(cellAddr);
-              cell && (cell.alignment = { horizontal: 'center' });
+
             }
           });
-        });
+        });*/
       }
       buffer = await excel.xlsx.writeBuffer();
     } catch (exp) {
