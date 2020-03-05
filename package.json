@@ -1,6 +1,6 @@
 {
   "name": "general-export",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "This is a JavaScript file export library running on the browser side, which can support XML, json, text, SQL, CSV, XLSX and other file formats.",
   "main": "index.js",
   "directories": {

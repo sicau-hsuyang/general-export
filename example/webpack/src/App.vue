@@ -11,6 +11,7 @@
 
 <script>
 import exportHelper from "../../../index.js";
+// import exportHelper from "../../../dist/main.web";
 console.log(exportHelper);
 export default {
     name: "app",

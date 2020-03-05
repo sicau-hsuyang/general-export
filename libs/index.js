@@ -118,10 +118,9 @@ class BSRunner {
       var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a')
       save_link.href = urlObject.createObjectURL(blob)
       save_link.download = filename
-      // var ev = document.createEvent('MouseEvents')
-      // ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
-      // save_link.dispatchEvent(ev)
-      save_link.click()
+      var ev = document.createEvent('MouseEvents')
+      ev.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null)
+      save_link.dispatchEvent(ev)
     }
   }
 
@@ -156,7 +155,7 @@ class BSRunner {
     // 设置配置项目中的数据
     Object.assign(this.config, { data: dataSource })
     let content = await this.worker.doExport();
-    typeof Buffer !== undefined && Buffer.isBuffer(content) ? this.saveFile(content) : utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)
+    utils.isNodeEnv() && typeof Buffer !== undefined && Buffer.isBuffer(content) ? this.saveFile(content) : utils.isBlob(content) ? this.saveBlob2File(content) : this.saveTxt2File(content)
   }
 
 }

@@ -1,4 +1,7 @@
-const ExcelJS = require('exceljs')
+let ExcelJS = null;
+import('exceljs').then(ins => {
+  ExcelJS = ins.default
+})
 const BaseComponent = require('../component')
 class XlsxComponent extends BaseComponent {
 

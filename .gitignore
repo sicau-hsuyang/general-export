@@ -4,6 +4,7 @@ node_modules
 /example/webpack/node_modules
 /example/nodejs/exports
 /tests/e2e/reports/
+/dist/*
 selenium-debug.log
 chromedriver.log
 geckodriver.log
