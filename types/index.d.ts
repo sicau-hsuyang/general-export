@@ -6,9 +6,14 @@ interface Column {
   prop: string;
 
   /**
+   * 可选 排序字段 默认排序 1000
+   */
+  order?: number;
+
+  /**
    * 是否需要格式化当前字段值
    */
-  formatter: (prop: any, row: any) => string;
+  formatter?: (prop: any, row: any) => string;
 
 }
 
@@ -17,9 +22,9 @@ interface Columns {
 }
 
 interface ExportConfig {
-
   //泛型 必选项
   data: Array<Object>
+
   // 必选项
   filename: string;
 
@@ -29,10 +34,25 @@ interface ExportConfig {
   // 默认 undefined
   columns: undefined | Array<Column> | Columns;
 
+  // 可选 配置序列化JSON的规则 默认 null
+  replacer: Function | undefined | null;
+
+  // 可选 配置序列化JSON时候的缩进 默认2
+  indent: number;
+
   // 可选 文件编码 该配置仅对部分导出生效
   // 默认utf-8
-  encode: string
+  encode: string;
 
+  // 可选 文件的生成路径 仅在nodejs环境中才会生效
+  // 默认 process.cwd() +"/export"
+  path: string;
+
+  // 可选 自动合并相邻行相等的值
+  autoMergeAdjacentRow: boolean;
+
+  // **高难度动作 可选 自动合并相邻列相等的值
+  autoMergeAdjacentCol: boolean;
 }
 
 /**

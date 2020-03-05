@@ -11,91 +11,123 @@
 
 <script>
 import exportHelper from "../../../index.js";
-// import exportHelper from "../../../dist/main.web";
-console.log(exportHelper);
+
+const data = [
+    {
+        id: 1,
+        name: "螺髻山",
+        url:
+            "https://baike.baidu.com/item/%E8%9E%BA%E9%AB%BB%E5%B1%B1%E9%A3%8E%E6%99%AF%E5%8C%BA/1226258?fr=aladdin",
+        location: "凉山彝族自治州普格县",
+        ticket: true,
+        price: 100,
+        createTime: Date.now()
+    },
+    {
+        id: 2,
+        name: "邛海",
+        url:
+            "https://baike.baidu.com/item/%E9%82%9B%E6%B5%B7/1247191?fr=aladdin",
+        location: "凉山彝族自治州西昌市",
+        price: 25,
+        ticket: true,
+        createTime: Date.now()
+    },
+    {
+        id: 3,
+        name: "兴隆湖",
+        url: "https://baike.baidu.com/item/%E5%85%B4%E9%9A%86%E6%B9%96",
+        location: "成都市天府新区兴隆镇",
+        ticket: false,
+        price: null,
+        createTime: Date.now()
+    }
+];
+
 export default {
     name: "app",
     methods: {
         fetchData() {
-            return [
-                {
-                    id: 1,
-                    name: "螺髻山",
-                    location: "四川省凉山彝族自治州普格县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 100
-                },
-                {
-                    id: 2,
-                    name: "邛海",
-                    location: "四川省凉山彝族自治州西昌市",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 25
-                },
-                {
-                    id: 3,
-                    name: "大风顶",
-                    location: "四川省凉山彝族自治州雷波县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 200
-                },
-                {
-                    id: 4,
-                    name: "泸山",
-                    location: "四川省凉山彝族自治州西昌市",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: true,
-                    price: 100
-                },
-                {
-                    id: 5,
-                    name: "西昌古城",
-                    location: "四川省凉山彝族自治州西昌市",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: false,
-                    price: 0
-                },
-                {
-                    id: 6,
-                    name: "马湖",
-                    location: "四川省凉山彝族自治州雷波县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: false,
-                    price: 0
-                },
-                {
-                    id: 7,
-                    name: "会理古城",
-                    location: "四川省凉山彝族自治州会理县",
-                    position: {
-                        lat: null,
-                        lng: null
-                    },
-                    isTicket: false,
-                    price: 0
-                }
-            ];
+            // return [
+            //     {
+            //         id: 1,
+            //         name: "螺髻山",
+            //         location: "四川省凉山彝族自治州普格县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 100
+            //     },
+            //     {
+            //         id: 2,
+            //         name: "邛海",
+            //         location: "四川省凉山彝族自治州西昌市",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 25
+            //     },
+            //     {
+            //         id: 3,
+            //         name: "大风顶",
+            //         location: "四川省凉山彝族自治州雷波县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 200
+            //     },
+            //     {
+            //         id: 4,
+            //         name: "泸山",
+            //         location: "四川省凉山彝族自治州西昌市",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: true,
+            //         price: 100
+            //     },
+            //     {
+            //         id: 5,
+            //         name: "西昌古城",
+            //         location: "四川省凉山彝族自治州西昌市",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: false,
+            //         price: 0
+            //     },
+            //     {
+            //         id: 6,
+            //         name: "马湖",
+            //         location: "四川省凉山彝族自治州雷波县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: false,
+            //         price: 0
+            //     },
+            //     {
+            //         id: 7,
+            //         name: "会理古城",
+            //         location: "四川省凉山彝族自治州会理县",
+            //         position: {
+            //             lat: null,
+            //             lng: null
+            //         },
+            //         isTicket: false,
+            //         price: 0
+            //     }
+            // ];
+            return data;
         },
         fetchData1() {
             let data = [
@@ -268,61 +300,67 @@ export default {
                     price: 180
                 }
             ];
-            let locationPos = 0;
-            let proPos = 0;
-            let output = data.map(x => {
-                let obj = {};
-                Object.entries(x).map(([prop, value]) => {
-                    obj[prop] = {
-                        value,
-                        colSpan: 1,
-                        rowSpan: 1
-                    };
-                });
-                return obj;
-            });
-            output.forEach((item, idx) => {
-                // 如果 省份和地级市相同 就合并
-                if (
-                    item.province.value + item.city.value ===
-                    item.location.value
-                ) {
-                    item.province.colSpan = 2;
-                    item.city.colSpan = 0;
-                    item.province.value = item.province.value + item.city.value;
-                }
+            // let locationPos = 0;
+            // let proPos = 0;
+            // let output = data.map(x => {
+            //     let obj = {};
+            //     Object.entries(x).map(([prop, value]) => {
+            //         obj[prop] = {
+            //             value,
+            //             colSpan: 1,
+            //             rowSpan: 1
+            //         };
+            //     });
+            //     return obj;
+            // });
+            // output.forEach((item, idx) => {
+            //     // 如果 省份和地级市相同 就合并
+            //     if (
+            //         item.province.value + item.city.value ===
+            //         item.location.value
+            //     ) {
+            //         item.province.colSpan = 2;
+            //         item.city.colSpan = 0;
+            //         item.province.value = item.province.value + item.city.value;
+            //     }
 
-                if (idx !== 0) {
-                    if (
-                        item.location.value === output[idx - 1].location.value
-                    ) {
-                        item.location.rowSpan = 0;
-                        output[locationPos].location.rowSpan++;
-                    } else {
-                        locationPos = idx;
-                    }
+            //     if (idx !== 0) {
+            //         if (
+            //             item.location.value === output[idx - 1].location.value
+            //         ) {
+            //             item.location.rowSpan = 0;
+            //             output[locationPos].location.rowSpan++;
+            //         } else {
+            //             locationPos = idx;
+            //         }
 
-                    if (
-                        item.province.value === output[idx - 1].province.value
-                    ) {
-                        item.province.rowSpan = 0;
-                        // 需要把横向数据置为0
-                        item.province.colSpan > 1 &&
-                            (item.province.colSpan = 0);
-                        output[proPos].province.rowSpan++;
-                    } else {
-                        proPos = idx;
-                    }
-                }
-            });
-            console.log(output);
-            return output;
+            //         if (
+            //             item.province.value === output[idx - 1].province.value
+            //         ) {
+            //             item.province.rowSpan = 0;
+            //             // 需要把横向数据置为0
+            //             item.province.colSpan > 1 &&
+            //                 (item.province.colSpan = 0);
+            //             output[proPos].province.rowSpan++;
+            //         } else {
+            //             proPos = idx;
+            //         }
+            //     }
+            // });
+            // return output;
+            return data;
         },
         handleJson() {
-            exportHelper("数据源.json", this.fetchData, {});
+            exportHelper("数据源.json", this.fetchData1, {})
+                .then(success => {
+                    console.log(success);
+                })
+                .catch(err => {
+                    console.log(err);
+                });
         },
         handleText() {
-            exportHelper("数据源.txt", this.fetchData, {
+            exportHelper("数据源.txt", this.fetchData1, {
                 columns: {
                     id: {
                         label: "序号"
@@ -343,7 +381,7 @@ export default {
             });
         },
         handleXml() {
-            exportHelper("数据源.xml", this.fetchData, {
+            exportHelper("数据源.xml", this.fetchData1, {
                 columns: [
                     { prop: "id", label: "序号" },
                     { prop: "name", label: "景点名称" },
@@ -363,7 +401,7 @@ export default {
             });
         },
         handleSql() {
-            exportHelper("数据源.sql", this.fetchData, {
+            exportHelper("数据源.sql", this.fetchData1, {
                 columns: [
                     { prop: "id", label: "序号" },
 
@@ -405,10 +443,10 @@ export default {
         handleXlsx() {
             exportHelper("数据源.xlsx", this.fetchData1, {
                 columns: [
-                    { prop: "id", label: "序号" },
-                    { prop: "name", label: "景点名称" },
-                    { prop: "province", label: "省/市/自治区" },
-                    { prop: "city", label: "市/州" },
+                    { prop: "id", label: "序号", order: 6 },
+                    // { prop: "name", label: "景点名称" },
+                    // { prop: "province", label: "省/市/自治区" },
+                    { prop: "city", label: "市/州", order: 1 },
                     { prop: "country", label: "区县" },
                     {
                         prop: "location",
@@ -418,10 +456,12 @@ export default {
                         prop: "price",
                         label: "门票价格",
                         formatter(price) {
-                            return price == 0 ? "-" : price;
+                            return price == 0 ? "无需门票" : price;
                         }
                     }
-                ]
+                ],
+                autoMergeAdjacentRow: true,
+                autoMergeAdjacentCol: true
             });
         }
     }

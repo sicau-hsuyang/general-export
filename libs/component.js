@@ -30,7 +30,8 @@ class BaseComponent {
         this.config.columns[prop].prop = prop;
         return {
           ...value,
-          prop
+          prop,
+          order: value.order || 1000
         };
       });
     }
@@ -39,7 +40,7 @@ class BaseComponent {
       //将其构造成 hash形式
       let mapping = {};
       this.config.columns.forEach(column => {
-        mapping[column.prop] = column;
+        mapping[column.prop] = { ...column, order: column.order || 1000};
       });
       this.config.columns = mapping;
       props = Object.values(this.config.columns);
@@ -54,7 +55,11 @@ class BaseComponent {
    */
   isObjCol(obj) {
     return (
-      Object.keys(obj).length === 3 && obj.colSpan && obj.rowSpan && obj.value
+      Object.isObject(obj) &&
+      Object.keys(obj).length === 3 &&
+      obj.colSpan !== undefined &&
+      obj.rowSpan !== undefined &&
+      obj.value !== undefined
     );
   }
 
@@ -63,7 +68,7 @@ class BaseComponent {
    * @param {Object} record 数据记录
    */
   isObjRow(record) {
-    return Object.values(record).every(x => this.isObjCol(x));
+    return record && Object.values(record).every(x => this.isObjCol(x));
   }
 
   /**
